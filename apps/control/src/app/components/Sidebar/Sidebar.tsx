@@ -23,7 +23,7 @@ const Sidebar: React.FC<Props> = (props) => {
 export default Sidebar;
 
 const Container = styled("aside")({
-  width: "40rem",
+  width: "100%",
   borderColor: "transparent",
   borderRightColor: Colors.gray9,
   borderWidth: "1px",

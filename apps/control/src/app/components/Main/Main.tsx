@@ -25,5 +25,4 @@ const Container = styled("main")({
 })
 
 const Wrapper = styled("div")({
-  padding: "2rem"
 })

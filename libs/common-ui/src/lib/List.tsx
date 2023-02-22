@@ -17,8 +17,6 @@ export const List: React.FC<Props> = (props) => {
 
 const Container = styled("div")({
   backgroundColor: Colors.gray10,
-  borderWidth: "1px",
-  borderStyle: "solid",
   flex: 1,
   height: "100%"
 })
@@ -30,6 +28,8 @@ const UL = styled("ul")({
   padding: 0,
   flexDirection: "column",
   flex: 1,
+  borderWidth: "1px",
+  borderStyle: "solid",
   borderColor: Colors.gray9,
   li: {
     backgroundColor: Colors.gray9,

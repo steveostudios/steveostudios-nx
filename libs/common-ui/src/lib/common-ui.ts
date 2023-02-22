@@ -1,3 +1,5 @@
 export * from "./Button"
 export * from "./TextInput"
 export * from "./List"
+export * from "./Toggle"
+export * from "./Label"

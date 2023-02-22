@@ -3,6 +3,7 @@ import {Colors} from "@nx/style";
 import styled from "@emotion/styled";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { Label } from "./Label";
 
 interface Props {
   slug: string;
@@ -24,7 +25,7 @@ export const Button: React.FC<Props> = (props) => {
 
   return (
     <Container>
-      {props.label ? <label htmlFor={props.slug}>{props.label}</label> : null}
+      <Label slug={props.slug} label={props.label}/>
       <ButtonElement onClick={onClick} skin={props.skin} disabled={props.disabled}>
         {props.icon ? <FontAwesomeIcon icon={props.icon} /> : null}
         {props.name ? <span>{props.name}</span> : null}

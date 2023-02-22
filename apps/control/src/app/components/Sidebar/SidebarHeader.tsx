@@ -1,11 +1,16 @@
 import styled from "@emotion/styled";
 import { Colors } from "@nx/style";
+import { Button } from "@nx/ui";
 
 const SidebarHeader = () => {
+  const onAccount = () => {
+    return
+  }
 
   return (
     <Container>
-      Gameshow
+      <div>Gameshow</div>
+      <div><Button slug="account" icon="user" onClick={onAccount}/></div>
     </Container>
   );
 };
@@ -21,5 +26,5 @@ const Container = styled("div")({
   display: "flex",
   alignItems: "center",
   padding: "0 2rem",
-  justifyContent: "flex-start"
+  justifyContent: "space-between"
 })

@@ -1,7 +1,8 @@
-import React, {ChangeEventHandler, FormEvent, TextareaHTMLAttributes, useState} from "react"
+import React, { FormEvent, useState} from "react"
 import {Colors} from "@nx/style";
 import { Button, Skin } from "./Button";
 import styled from "@emotion/styled";
+import { Label } from "./Label";
 
 interface Props {
   slug: string;
@@ -34,7 +35,7 @@ export const TextInput: React.FC<Props> = (props) => {
 
   return (
     <Container>
-       {props.label ? <label htmlFor={props.slug}>{props.label}</label> : null}
+      <Label slug={props.slug} label={props.label}/>
       {edit ? (
         <div>
             <input

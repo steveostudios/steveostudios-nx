@@ -10,8 +10,11 @@ export const fakeData = {
       type: 'pickme',
       name: 'Pick-a-kid',
       settings: {
-        background: 1,
-        theme: 2,
+        background: 3,
+        theme: 4,
+        instructionsContent: "Here are some instructions",
+        instructions: false,
+        titleGraphic: false
       },
       items: [
         {
@@ -41,6 +44,9 @@ export const fakeData = {
       settings: {
         background: 3,
         theme: 4,
+        instructionsContent: "Here are some instructions",
+        instructions: false,
+        titleGraphic: false
       },
       items: [
         {
@@ -74,6 +80,9 @@ export interface File {
   settings: {
     background: number;
     theme: number;
+    titleGraphic: boolean;
+    instructionsContent: string;
+    instructions: boolean;
   }
 }
 
