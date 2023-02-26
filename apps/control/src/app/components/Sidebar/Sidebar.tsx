@@ -1,21 +1,21 @@
 import styled from "@emotion/styled";
 import { Colors } from "@nx/style";
-import { File } from "../../fake-data";
 import SidebarHeader from "./SidebarHeader";
 import SidebarList from "./SidebarList";
 import SidebarPreview from "./SidebarPreview";
 
 interface Props {
-  files?: File[];
+  userId: string;
+  selectedFileId: string | null;
+  setSelectedFileId: (value: string) => void; 
 }
 
 const Sidebar: React.FC<Props> = (props) => {
-
   return (
     <Container>
       <SidebarHeader />
-      <SidebarPreview />
-      <SidebarList files={props.files} />
+      <SidebarPreview userId={props.userId} />
+      <SidebarList userId={props.userId} selectedFileId={props.selectedFileId} setSelectedFileId={props.setSelectedFileId} />
     </Container>
   );
 };

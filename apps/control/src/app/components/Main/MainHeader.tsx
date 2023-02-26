@@ -1,12 +1,21 @@
 import styled from "@emotion/styled";
 import { Colors } from "@nx/style";
 import { Toggle } from "@nx/ui";
-import { useState } from "react";
+import { onUpdateFileSettings } from "../../integrations/firebase";
 
-const MainHeader = () => {
-  const [sound, setSound] = useState(false);
-  const [title, setTitle] = useState(false);
-  const [instructions, setInstructions] = useState(false);
+interface Props {
+  selectedFileId: string | null;
+  titleGraphic: boolean;
+  sounds: boolean;
+  instructions: boolean;
+}
+
+const MainHeader: React.FC<Props> = (props) => {
+
+  const onUpdateSetting = (setting: string, value: boolean) => {
+    console.log(setting, value)
+     if (props.selectedFileId) onUpdateFileSettings(props.selectedFileId, {[`settings.${setting}`]: value})
+  }
 
   return (
     <Container>
@@ -14,9 +23,9 @@ const MainHeader = () => {
         Edit Play
       </Modes>
       <Toggles>
-        <Toggle slug="sound" label="Sound" value={sound} onChange={setSound} column />
-        <Toggle slug="title" label="Title Graphic" value={title} onChange={setTitle} column />
-        <Toggle slug="instructions" label="Instructions" value={instructions} onChange={setInstructions} column />
+        <Toggle slug="sound" label="Sound" value={props.sounds} onChange={(value) => onUpdateSetting("sounds", value)} column />
+        <Toggle slug="title" label="Title Graphic" value={props.titleGraphic} onChange={(value) => onUpdateSetting("titleGraphic", value)} column />
+        <Toggle slug="instructions" label="Instructions" value={props.instructions} onChange={(value) => onUpdateSetting("instructions", value)} column />
       </Toggles>
     </Container>
   );

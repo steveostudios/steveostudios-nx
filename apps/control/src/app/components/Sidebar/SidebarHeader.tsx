@@ -1,10 +1,16 @@
 import styled from "@emotion/styled";
 import { Colors } from "@nx/style";
 import { Button } from "@nx/ui";
+import { useModals } from "../../providers/ModalProvider";
+import AccountModal from "../modals/AccountModal";
 
 const SidebarHeader = () => {
+  const { push } = useModals();
   const onAccount = () => {
-    return
+    push({
+      component: AccountModal,
+      title: "Account"
+    })
   }
 
   return (

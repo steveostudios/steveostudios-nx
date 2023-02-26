@@ -13,6 +13,7 @@ interface Props {
   name?: string;
   skin?: Skin;
   icon?: IconProp;
+  flex?: boolean; 
 }
 
 export const Button: React.FC<Props> = (props) => {
@@ -24,9 +25,9 @@ export const Button: React.FC<Props> = (props) => {
   };
 
   return (
-    <Container>
+    <Container >
       <Label slug={props.slug} label={props.label}/>
-      <ButtonElement onClick={onClick} skin={props.skin} disabled={props.disabled}>
+      <ButtonElement onClick={onClick} skin={props.skin} disabled={props.disabled} flex={props.flex}>
         {props.icon ? <FontAwesomeIcon icon={props.icon} /> : null}
         {props.name ? <span>{props.name}</span> : null}
       </ButtonElement>
@@ -77,21 +78,28 @@ const ButtonElement = styled("button")({
     opacity: 1
   },
 },
-(props: { skin?: Skin, disabled?: boolean }) => {
+(props: { skin?: Skin, disabled?: boolean, flex?: boolean }) => {
+  let options = {}
   if (props.skin) {
-    return {
+    options = {...options,
       backgroundColor: backgroundColor[props.skin] || Colors.gray9,
       borderColor: borderColor[props.skin] || Colors.gray8
     }
   }
   if (props.disabled) {
-    return {
+    options =  {...options,
       opacity: 0.3,
       "&:hover": {
         opacity: 0.3
       }
     }
   }
+  if (props.flex) {
+    options = {...options,
+      flex: 1,
+      width: "100%"
+    }
+  }
 
-  return {};
+  return options;
 })

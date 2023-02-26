@@ -4,13 +4,17 @@ import MainHeader from "./MainHeader";
 
 interface Props {
   children: ReactNode;
+  selectedFileId: string | null;
+  titleGraphic: boolean;
+  sounds: boolean;
+  instructions: boolean;
 }
 
 const Main: React.FC<Props> = (props) => {
 
   return (
     <Container>
-      <MainHeader />
+      <MainHeader selectedFileId={props.selectedFileId} titleGraphic={props.titleGraphic} sounds={props.sounds} instructions={props.instructions} />
       <Wrapper>
         {props.children}
         </Wrapper>

@@ -38,7 +38,10 @@ const UL = styled("ul")({
   },
   "li:nth-of-type(even)": {
     backgroundColor: Colors.gray8,
-  }
+  },
+  "li.selected": {
+    backgroundColor: Colors.blue
+  } 
 }, (props: {hideBorder?: boolean}) => {
   if (props.hideBorder) {
     return {
