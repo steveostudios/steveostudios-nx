@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { onGetFile, onGetUser, onGetUserSettings, onSetFile, onUpdateFile } from "@nx/firebase"
 import { Colors } from "@nx/style";
 import { File, Item, Modes, pickmeWeights, UserSettings } from "@nx/shared-assets";
-import {Button, List, TextInput, Skin, Select, LockedInput} from "@nx/ui"
+import {Button, List, TextInput, Skin, Select, LockedInput, Toggle} from "@nx/ui"
 import { useEffect, useState } from "react";
 import DisplayOptions from "../components/Main/DisplayOptions";
 import Main from "../components/Main/Main";
@@ -114,10 +114,16 @@ const Manage = () => {
     }
   }
 
+  const onHideLastItem = (value: boolean) => {
+    if (selectedFileId) {
+      onUpdateFile(selectedFileId, {'settings.hideLastItem': value})
+    }
+  }
+
   return (
     <Container>
       <Sidebar userId={userId} selectedFileId={selectedFileId} setSelectedFileId={onSelectFile} />
-      {file && selectedFileId && <Main userId={userId} selectedFileId={selectedFileId} titleGraphic={userSettings?.titleGraphic} sounds={userSettings?.sounds} instructions={userSettings?.instructions}>
+      {file && selectedFileId && userSettings?.selectedMode === Modes.EDIT && <Main userId={userId} selectedFileId={selectedFileId} titleGraphic={userSettings?.titleGraphic} sounds={userSettings?.sounds} instructions={userSettings?.instructions}>
         <Section>
           <DisplayOptions selectedFileId={selectedFileId} name={file.name} builder={file.builder} theme={file.settings.theme} background={file.settings.background} instructionsContent={file.settings.instructionsContent} />
         </Section>
@@ -141,6 +147,16 @@ const Manage = () => {
           </List>
         </SectionFullHeight>
       </Main>}
+      {file 
+      && selectedFileId 
+      && userSettings?.selectedMode === Modes.PLAY 
+      && <Main userId={userId} selectedFileId={selectedFileId} titleGraphic={userSettings?.titleGraphic} sounds={userSettings?.sounds} instructions={userSettings?.instructions}>
+        <Section>
+          <Button slug="spin" onClick={onDoSomething} skin={Skin.primary} name="Spin"/>
+          <Toggle label="Hide Last Item" slug="hideLastItem" onChange={onHideLastItem} value={file.settings.hideLastItem} />
+        </Section>
+        </Main>}
+
     </Container>
   );
 };

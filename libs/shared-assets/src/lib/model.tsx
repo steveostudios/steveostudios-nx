@@ -28,6 +28,7 @@ export interface Settings {
   theme: number;
   instructionsContent: string;
   instructions: boolean; 
+  hideLastItem: boolean;
 }
 
 export interface SimpleFile {

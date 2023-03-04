@@ -19,7 +19,8 @@ export const pickmeDefaultFile: Omit<File, "id"> = {
     sounds: true,
     instructionsContent: "",
     theme: 2,
-    background: 3
+    background: 3,
+    hideLastItem: false
   },
   items: {}
 }
