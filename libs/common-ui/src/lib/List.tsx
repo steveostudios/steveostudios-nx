@@ -18,7 +18,8 @@ export const List: React.FC<Props> = (props) => {
 const Container = styled("div")({
   backgroundColor: Colors.gray10,
   flex: 1,
-  height: "100%"
+  height: "100%",
+    overflowY: "scroll"
 })
 
 const UL = styled("ul")({
@@ -28,6 +29,7 @@ const UL = styled("ul")({
   padding: 0,
   flexDirection: "column",
   flex: 1,
+  boxSizing: "border-box",
   borderWidth: "1px",
   borderStyle: "solid",
   borderColor: Colors.gray9,
@@ -45,7 +47,7 @@ const UL = styled("ul")({
 }, (props: {hideBorder?: boolean}) => {
   if (props.hideBorder) {
     return {
-      borderColor: "transparent",
+      border: "none",
     }
   }
   return {};

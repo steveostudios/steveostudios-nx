@@ -25,7 +25,7 @@ export const Button: React.FC<Props> = (props) => {
   };
 
   return (
-    <Container >
+    <Container flex={props.flex}>
       <Label slug={props.slug} label={props.label}/>
       <ButtonElement onClick={onClick} skin={props.skin} disabled={props.disabled} flex={props.flex}>
         {props.icon ? <FontAwesomeIcon icon={props.icon} /> : null}
@@ -36,7 +36,17 @@ export const Button: React.FC<Props> = (props) => {
 };
 
 const Container = styled("div")({
+},
+(props: { flex?: boolean }) => {
+  let options = {}
+  if (props.flex) {
+    options = {...options,
+      flex: 1,
+      width: "100%"
+    }
+  }
 
+  return options;
 })
 
 export enum Skin {

@@ -1,13 +1,8 @@
 import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { List } from "@nx/ui";
-import { onGetFiles } from "../../integrations/firebase";
-import { Colors } from "@nx/style";
-
-interface SimpleFile {
-  id: string;
-  name: string;
-}
+import { onGetFiles } from "@nx/firebase";
+import { SimpleFile } from "@nx/shared-assets";
 
 interface Props {
   userId: string;
@@ -27,15 +22,20 @@ const SidebarList: React.FC<Props> = (props) => {
   }
   
   return (
-    <div>
-      <List>
+    <Container>
+      <List hideBorder >
         {files && files?.map(file => <Item key={file.id} className={file.id === props.selectedFileId ? "selected" : ""} onClick={() => onSelectFile(file.id)}>{file.name}</Item>)}
       </List>
-    </div>
+    </Container>
   );
 };
 
 export default SidebarList;
+
+const Container = styled("div")({
+  display: "flex",
+  flex: 1,
+})
 
 const Item = styled("li")({
   height: "4rem",

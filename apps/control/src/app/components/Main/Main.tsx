@@ -5,16 +5,17 @@ import MainHeader from "./MainHeader";
 interface Props {
   children: ReactNode;
   selectedFileId: string | null;
-  titleGraphic: boolean;
-  sounds: boolean;
-  instructions: boolean;
+  titleGraphic?: boolean;
+  sounds?: boolean;
+  instructions?: boolean;
+  userId: string;
 }
 
 const Main: React.FC<Props> = (props) => {
 
   return (
     <Container>
-      <MainHeader selectedFileId={props.selectedFileId} titleGraphic={props.titleGraphic} sounds={props.sounds} instructions={props.instructions} />
+      <MainHeader userId={props.userId} selectedFileId={props.selectedFileId} titleGraphic={props.titleGraphic} sounds={props.sounds} instructions={props.instructions} />
       <Wrapper>
         {props.children}
         </Wrapper>
@@ -25,8 +26,15 @@ const Main: React.FC<Props> = (props) => {
 export default Main;
 
 const Container = styled("main")({
+  display: "flex",
+  flexDirection: "column",
   flex: 1,
+  height: "100vh"
 })
 
 const Wrapper = styled("div")({
+  flex: 1,
+  maxHeight: "calc(100vh - 8rem)",
+  display: "flex",
+  flexDirection: "column",
 })

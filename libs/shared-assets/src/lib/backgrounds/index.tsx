@@ -38,7 +38,14 @@ import thumb037 from "./background037.jpg";
 import thumb038 from "./background038.jpg";
 import thumb039 from "./background039.jpg";
 
-export default [
+interface Background {
+  id: number;
+  name: string;
+  thumb: string;
+  file: string;
+}
+
+export const backgrounds: Background[] = [
   {
     id: 1,
     name: "Marquee",

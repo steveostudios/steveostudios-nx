@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { Colors } from "@nx/style";
+import SidebarCreateFile from "./SidebarCreateFile";
 import SidebarHeader from "./SidebarHeader";
 import SidebarList from "./SidebarList";
 import SidebarPreview from "./SidebarPreview";
@@ -16,6 +17,7 @@ const Sidebar: React.FC<Props> = (props) => {
       <SidebarHeader />
       <SidebarPreview userId={props.userId} />
       <SidebarList userId={props.userId} selectedFileId={props.selectedFileId} setSelectedFileId={props.setSelectedFileId} />
+      <SidebarCreateFile userId={props.userId} />
     </Container>
   );
 };
@@ -23,9 +25,11 @@ const Sidebar: React.FC<Props> = (props) => {
 export default Sidebar;
 
 const Container = styled("aside")({
+  display: "flex",
+  flexDirection: "column",
   width: "100%",
-  borderColor: "transparent",
+  boxSizing: "border-box",
   borderRightColor: Colors.gray9,
-  borderWidth: "1px",
-  borderStyle: "solid",
+  borderRightWidth: "1px",
+  borderRightStyle: "solid",
 })

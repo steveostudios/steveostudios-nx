@@ -1,3 +1,5 @@
+import { Option } from "@nx/ui";
+import { Builders, File } from "../model";
 import thumb001 from "./theme-thumb001.png";
 import thumb002 from "./theme-thumb002.png";
 import thumb003 from "./theme-thumb003.png";
@@ -7,7 +9,29 @@ import thumb006 from "./theme-thumb006.png";
 import thumb007 from "./theme-thumb007.png";
 import thumb008 from "./theme-thumb008.png";
 
-export default [
+export const pickmeDefaultFile: Omit<File, "id"> = {
+  builder: Builders.PICKME,
+  name: "",
+  userId: "",
+  settings: {
+    titleGraphic: false,
+    instructions: false,
+    sounds: true,
+    instructionsContent: "",
+    theme: 2,
+    background: 3
+  },
+  items: {}
+}
+
+interface Themes {
+  id: number;
+  name: string;
+  thumb: string;
+  file: string;
+}
+
+export const pickmeThemes: Themes[] = [
   {
     id: 1,
     name: "Marquee",
@@ -56,4 +80,11 @@ export default [
     thumb: thumb008,
     file: "theme-file008.png",
   },
+];
+
+export const pickmeWeights: Option[] = [
+  { name: "Most likely to win", value: 3 },
+  { name: "Likely to win", value: 2 },
+  { name: "Least Likely to win", value: 1 },
+  { name: "Never win", value: 0 },
 ];

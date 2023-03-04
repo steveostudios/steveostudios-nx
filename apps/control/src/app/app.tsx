@@ -16,7 +16,8 @@ import { far } from "@fortawesome/pro-regular-svg-icons";
 import { fas } from "@fortawesome/pro-solid-svg-icons";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import { Modal } from '@nx/ui';
-import { ModalContext, ModalProps } from './providers/ModalProvider';
+import { ModalContext } from './providers/ModalProvider';
+import { ModalProps } from '@nx/ui';
 import { Colors } from '@nx/style';
 library.add(fal, far, fas, fab);
 

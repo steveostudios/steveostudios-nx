@@ -13,7 +13,7 @@ interface Props {
   type?: "text" | "phone" | "password" | "email";
 }
 
-export const TextInput: React.FC<Props> = (props) => {
+export const LockedInput: React.FC<Props> = (props) => {
   const [edit, setEdit] = useState(false);
   const [value, setValue] = useState("");
   

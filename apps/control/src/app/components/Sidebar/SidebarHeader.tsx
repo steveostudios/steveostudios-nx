@@ -24,10 +24,11 @@ const SidebarHeader = () => {
 export default SidebarHeader;
 
 const Container = styled("div")({
+  boxSizing: "border-box",
   height: "8rem",
-  borderWidth: "1px",
-  borderStyle: "solid",
-  borderColor: "transparent",
+  border: "none",
+  borderBottomWidth: 1,
+  borderBottomStyle: "solid",
   borderBottomColor: Colors.gray9,
   display: "flex",
   alignItems: "center",

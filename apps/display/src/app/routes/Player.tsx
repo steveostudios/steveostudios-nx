@@ -1,31 +1,38 @@
 import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
 import {Colors} from "@nx/style"
-import { Background, Instructions, Title, Builders } from "@nx/shared-assets";
-import { onGetFile, File, onGetUser} from "../integrations/firebase";
+import { Background, Instructions, Title, Builders, File, Modes, UserSettings } from "@nx/shared-assets";
+import { onGetFile, onGetUser, onGetUserSettings} from "@nx/firebase";
 import { useParams } from "react-router-dom";
 
 export const Player: React.FC = () => {
   const [file, setFile] = useState<File | null>();
   const [fileId, setFileId] = useState<string | null>()
   const { userId } = useParams();
+  const [userSettings, setUserSettings] = useState<UserSettings | null>({  
+    titleGraphic: false,
+    sounds: true,
+    instructions: false,
+    selectedMode: Modes.EDIT,
+    selectedFileId: null
+  })
 
   useEffect(() => {
-    if (fileId)
-    onGetFile(fileId, setFile)
-  }, [fileId])
+    if (userSettings?.selectedFileId)
+    onGetFile(userSettings?.selectedFileId, setFile)
+  }, [userSettings?.selectedFileId])
 
   useEffect(() => {
-   if (userId) onGetUser(userId, setFileId)
-  }, [userId])
+    if (userId) onGetUserSettings(userId, (data) => setUserSettings({...data}))
+   }, [userId])
 
   return (
     <Container>
       {file && <>
         <Background value={file.settings?.background} />
         <div>Game content</div>
-        <Instructions active={file.settings?.instructions} value={file.settings?.instructionsContent} showBackground/>
-        <Title active={file.settings?.titleGraphic} value={file.name} builder={Builders.pickme}/>
+        <Instructions active={!!userSettings?.instructions} value={file.settings?.instructionsContent} showBackground/>
+        <Title active={!!userSettings?.titleGraphic} value={file.name} builder={Builders.PICKME}/>
       </>}
     </Container>
   )

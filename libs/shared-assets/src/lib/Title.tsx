@@ -2,13 +2,7 @@ import React from "react";
 import styled from "@emotion/styled"
 import {Colors} from "@nx/style";
 import { builders } from "./builders";
-// import builders from "./builders";
-
-  export enum Builders {
-    pickme = "PICKME",
-    wheel = "WHEEL",
-    boxes= "BOXES",
-  }
+import {Builders} from "./model"
 
 interface Props {
   active: boolean;
@@ -17,6 +11,7 @@ interface Props {
 }
 
 export const Title: React.FC<Props> = (props) => {
+  console.log(props.builder)
   const builder = builders.find(item => item.slug === props.builder)
   return (
     <SVG viewBox="0 0 1920 1080" active={props.active} >

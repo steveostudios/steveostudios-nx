@@ -3,10 +3,10 @@ import {Colors} from "@nx/style";
 import styled from "@emotion/styled";
 import { Button, Skin } from "./Button";
 
-interface Props {
-  component: FunctionComponent
+export interface ModalProps {
+  component: FunctionComponent<any>
   title: string;
-  close: () => void;
+  close?: () => void;
   onCancel?: () => void;
   onConfirm?: (data: any) => void;
   onLiveUpdate?: (data: any) => void;
@@ -14,27 +14,28 @@ interface Props {
   data?: any;
 }
 
-export const Modal: React.FC<Props> = (props) => {
-  // const [data, setData] = useState({});
+export const Modal: React.FC<ModalProps> = (props) => {
+  const [data, setData] = useState({});
 
   const onClose = () => {
-    props.close();
+    if (props.close) props.close();
   };
 
-  // const onConfirm = () => {
-  //   if (props.onConfirm) props.onConfirm(data);
-  //   onClose();
-  // };
+  const onConfirm = () => {
+    if (props.onConfirm) props.onConfirm(data);
+    onClose();
+  };
 
-  // const onCancel = () => {
-  //  if (props.onCancel) props.onCancel();
-  //   onClose();
-  // };
+  const onCancel = () => {
+   if (props.onCancel) props.onCancel();
+    onClose();
+  };
 
-  // useEffect(() => {
-  //   if (!props.onLiveUpdate) return;
-  //   props.onLiveUpdate(data);
-  // }, [props, data]);
+  useEffect(() => {
+    if (!props.onLiveUpdate) return;
+    console.log(data)
+    props.onLiveUpdate(data);
+  }, [props, data]);
 
   const Component = props.component;
 
@@ -47,22 +48,17 @@ export const Modal: React.FC<Props> = (props) => {
         </Header>
         <Body>
           <Component
-            // data={data}
-            // setData={setData}
-            // initialData={props.initialData}
+            data={data}
+            setData={setData}
+            initialData={props.initialData}
           />
         </Body>
-        {/* {props.onCancel ||
-          (props.onConfirm && (
-            <Footer>
-              {props.onConfirm && (
-                <Button skin="secondary" name="Yes" onClick={onConfirm} />
-              )}
-              {props.onCancel && (
-                <Button skin="outline" name="No" onClick={onCancel} />
-              )}
-            </Footer>
-          ))} */}
+          {(typeof props.onConfirm === 'function' 
+            || typeof props.onCancel === 'function') 
+            && <Footer>
+                {typeof props.onConfirm === 'function' && <Button slug="confirm" skin={Skin.secondary} name="Yes" onClick={onConfirm} />}
+                {typeof props.onCancel === 'function' &&<Button slug="cancel" name="No" onClick={onCancel} />}
+            </Footer>}
       </Container>
     </Wrapper>
   );
@@ -108,14 +104,14 @@ const Body = styled("div")({
   minHeight: "4rem",
 });
 
-// const Footer = styled("div")({
-//   padding: "2rem",
-//   display: "flex",
-//   gap: "1rem",
-//   justifyContent: "flex-end",
-//   alignItems: "center",
-//   height: "6rem",
-//   "& button": {
-//     padding: "1rem 3rem",
-//   }
-// });
+const Footer = styled("div")({
+  padding: " 0 2rem 2rem 2rem",
+  display: "flex",
+  gap: "1rem",
+  justifyContent: "flex-end",
+  alignItems: "center",
+  height: "6rem",
+  "& button": {
+    padding: "1rem 3rem",
+  }
+});
