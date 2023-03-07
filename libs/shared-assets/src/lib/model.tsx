@@ -4,6 +4,11 @@ export enum Builders {
   WHEEL = "wheel",
   BOXES = "boxes",
 }
+
+export enum NextWinnerType {
+  RANDOM = "random",
+  PRESELECTED = "preselected",
+}
 export interface Item {
   id: string;
   name: string;
@@ -13,27 +18,25 @@ export interface Item {
 }
 
 export interface File {
-  userId: string;
   id: string;
   builder: Builders;
-  settings: Settings;
   items:{ [id: string]: Item};
   name: string;
-}
-
-export interface Settings {
-  titleGraphic: boolean;
-  sounds: boolean;
+  preselectedIds: string[];
+  nextRandomId: string | null;
+  nextPreselectedId: string | null;
+  nextWinnerType: NextWinnerType;
+  showPicker: boolean;
+  hideLastItem: boolean;
   background: number;
   theme: number;
   instructionsContent: string;
-  instructions: boolean; 
-  hideLastItem: boolean;
 }
 
 export interface SimpleFile {
   id: string;
   name: string;
+  builder: Builders;
 }
 
 export enum Modes {

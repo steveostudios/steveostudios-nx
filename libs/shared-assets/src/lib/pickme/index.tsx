@@ -1,5 +1,5 @@
 import { Option } from "@nx/ui";
-import { Builders, File } from "../model";
+import { Builders, File, NextWinnerType } from "../model";
 import thumb001 from "./theme-thumb001.png";
 import thumb002 from "./theme-thumb002.png";
 import thumb003 from "./theme-thumb003.png";
@@ -8,20 +8,27 @@ import thumb005 from "./theme-thumb005.png";
 import thumb006 from "./theme-thumb006.png";
 import thumb007 from "./theme-thumb007.png";
 import thumb008 from "./theme-thumb008.png";
+import file001 from "./theme-file001.png";
+import file002 from "./theme-file002.png";
+import file003 from "./theme-file003.png";
+import file004 from "./theme-file004.png";
+import file005 from "./theme-file005.png";
+import file006 from "./theme-file006.png";
+import file007 from "./theme-file007.png";
+import file008 from "./theme-file008.png";
 
 export const pickmeDefaultFile: Omit<File, "id"> = {
   builder: Builders.PICKME,
   name: "",
-  userId: "",
-  settings: {
-    titleGraphic: false,
-    instructions: false,
-    sounds: true,
-    instructionsContent: "",
-    theme: 2,
-    background: 3,
-    hideLastItem: false
-  },
+  preselectedIds: [],
+  nextPreselectedId: null,
+  nextRandomId: null,
+  nextWinnerType: NextWinnerType.RANDOM,
+  showPicker: true,
+  hideLastItem: true,
+  instructionsContent: "",
+  theme: 2,
+  background: 3,
   items: {}
 }
 
@@ -37,49 +44,49 @@ export const pickmeThemes: Themes[] = [
     id: 1,
     name: "Marquee",
     thumb: thumb001,
-    file: "theme-file001.png",
+    file: file001,
   },
   {
     id: 2,
     name: "LED",
     thumb: thumb002,
-    file: "theme-file002.png",
+    file: file002,
   },
   {
     id: 3,
     name: "Golden Ticket",
     thumb: thumb003,
-    file: "theme-file003.png",
+    file: file003,
   },
   {
     id: 4,
     name: "Naked Dark",
     thumb: thumb004,
-    file: "theme-file004.png",
+    file: file004,
   },
   {
     id: 5,
     name: "Naked Light",
     thumb: thumb005,
-    file: "theme-file005.png",
+    file: file005,
   },
   {
     id: 6,
     name: "Box Dark",
     thumb: thumb006,
-    file: "theme-file006.png",
+    file: file006,
   },
   {
     id: 7,
     name: "Box Light",
     thumb: thumb007,
-    file: "theme-file007.png",
+    file: file007,
   },
   {
     id: 8,
     name: "Flux Capacitor",
     thumb: thumb008,
-    file: "theme-file008.png",
+    file: file008,
   },
 ];
 

@@ -3,8 +3,8 @@ export const hello = "hello world";
 // import { Builders } from "@nx/shared-assets";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { collection, getFirestore, onSnapshot, doc, where, query, updateDoc, addDoc } from "firebase/firestore";
-import {File, SimpleFile, UserSettings} from "@nx/shared-assets"
+import { collection, getFirestore, onSnapshot, doc, where, query, updateDoc, addDoc, arrayUnion, arrayRemove, deleteDoc, deleteField } from "firebase/firestore";
+import {Builders, File, SimpleFile, UserSettings} from "@nx/shared-assets"
 
 const firebaseConfig = {
   apiKey: process.env.NX_FIREBASE_API_KEY,
@@ -24,15 +24,55 @@ const db = getFirestore(app);
 
 // export const auth = getAuth(app)
 
+interface FileTest {
+  name: string;
+  builder: string;
+}
+
+interface UserFile {
+  name: string,
+  builder: string,
+}
+
+interface UserFileMap {
+  [key:string]: UserFile
+}
+
 // Files
-export const onGetFiles = async (userId: string | undefined, updateState: (data: SimpleFile[] | undefined) => void) => {
-  if (userId) {
-    const filesRef = collection(db, "files");
-    const q = query(filesRef, where('userId', "==", userId ))
-    await onSnapshot(q, snapshot => {
-      updateState(snapshot.docs.map(doc => {return {id: doc.id, name: doc.data().name}}))
-    })
-  }
+export const onGetFiles = async (userId: string, updateState: (data: SimpleFile[] | undefined) => void) => {
+  const userRef = doc(db, "users", userId);
+  onSnapshot(userRef, snapshot => {
+    const data = snapshot.data();
+    updateState(
+      Object.entries(data?.files as UserFileMap).map(([id, item]) => ({id, name: item.name, builder: Builders.PICKME})) || undefined
+    )
+  })
+}
+
+// - create a new file 
+export const onCreateFile = async (userId: string, file: Omit<File, "id">) => {
+  const fileRef = await addDoc(collection(db, "files"), file);
+  const userRef = doc(db, "users", userId);
+  await updateDoc(userRef, {[`files.${fileRef.id}`]: {
+    name: file.name,
+    builder: file.builder
+  }})
+}
+
+export const onDeleteFile = async(userId: string, fileId: string) => {
+  const userRef = doc(db, "users", userId);
+  const fileRef = doc(db, "files", fileId);
+  await deleteDoc(fileRef)
+  await updateDoc(userRef, {[`files.${fileId}`]: deleteField()})
+}
+
+export const onRenameFile = async(userId: string, fileId: string, name: string) => {
+  const userRef = doc(db, "users", userId);
+  const fileRef = doc(db, "files", fileId);
+  await updateDoc(userRef, {[`files.${fileId}`]: {
+    name: name
+  }})
+  await updateDoc(fileRef, {name})
 }
 
 // File
@@ -49,18 +89,11 @@ export const onGetFile = async (fileId: string, updateState: (data: any | undefi
     const data = snapshot.data();
     updateState({
       id: snapshot.id, 
-      builder: data?.builder, 
-      name: data?.name,
-      settings: data?.settings,
-			items: data?.items
+      ...data
     })
   })
 }
 
-// - create a new file 
-export const onCreateFile = async (file: Omit<File, "id">) => {
-	await addDoc(collection(db, "files"), file);
-}
 
 // Settings
 export const onUpdateFileSettings = async (fileId: string, update: object) => {
@@ -93,7 +126,7 @@ export const onGetUserSettings = async (userId: string, updateState: (data: User
       sounds: data?.sounds,
       instructions: data?.instructions,
       selectedMode: data?.selectedMode,
-      selectedFileId: data?.selectedFileId
+      selectedFileId: data?.selectedFileId,
     })
   })
 }
@@ -102,4 +135,25 @@ export const onUpdateUserSettings = async (userId: string, update: object) => {
   console.log(userId, update)
   const userRef = doc(db, "users", userId);
   await updateDoc(userRef, update);
+}
+
+
+export enum ArrayAction {
+  ADD = "union",
+  REMOVE = "remove",
+}
+
+export const onUpdateArray = async (fileId: string, arrayName: string, value: string, action: ArrayAction ) => {
+  const fileRef = doc(db, 'files', fileId)
+  if (action === ArrayAction.ADD) {
+    await updateDoc(fileRef, {
+      [arrayName]: arrayUnion(value)
+    })
+  }
+  if (action === ArrayAction.REMOVE) {
+    await updateDoc(fileRef, {
+      [arrayName]: arrayRemove(value)
+    })
+  }
+  return
 }

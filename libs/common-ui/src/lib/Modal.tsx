@@ -1,7 +1,7 @@
 import React, { useState, useEffect, ReactElement, ReactNode, FunctionComponent } from "react";
 import {Colors} from "@nx/style";
 import styled from "@emotion/styled";
-import { Button, Skin } from "./Button";
+import { Button, ButtonStyle } from "./Button";
 
 export interface ModalProps {
   component: FunctionComponent<any>
@@ -44,7 +44,7 @@ export const Modal: React.FC<ModalProps> = (props) => {
       <Container onClick={(e) => e.stopPropagation()}>
         <Header>
           <span>{props.title}</span>
-          <Button slug="close" skin={Skin.clear} icon="times" onClick={onClose} />
+          <Button slug="close" skin={ButtonStyle.CLEAR} icon="times" onClick={onClose} />
         </Header>
         <Body>
           <Component
@@ -56,7 +56,7 @@ export const Modal: React.FC<ModalProps> = (props) => {
           {(typeof props.onConfirm === 'function' 
             || typeof props.onCancel === 'function') 
             && <Footer>
-                {typeof props.onConfirm === 'function' && <Button slug="confirm" skin={Skin.secondary} name="Yes" onClick={onConfirm} />}
+                {typeof props.onConfirm === 'function' && <Button slug="confirm" skin={ButtonStyle.SECONDARY} name="Yes" onClick={onConfirm} />}
                 {typeof props.onCancel === 'function' &&<Button slug="cancel" name="No" onClick={onCancel} />}
             </Footer>}
       </Container>

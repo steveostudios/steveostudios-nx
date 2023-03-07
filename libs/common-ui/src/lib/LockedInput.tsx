@@ -1,6 +1,6 @@
 import React, { FormEvent, useState} from "react"
 import {Colors} from "@nx/style";
-import { Button, Skin } from "./Button";
+import { Button, ButtonStyle } from "./Button";
 import styled from "@emotion/styled";
 import { Label } from "./Label";
 
@@ -47,17 +47,17 @@ export const LockedInput: React.FC<Props> = (props) => {
             <Button
               onClick={onConfirmChange}
               icon="check-circle"
-              skin={Skin.clear}
+              skin={ButtonStyle.CLEAR}
               slug="confirm"
             />
-            <Button onClick={toggleEdit} icon="times" skin={Skin.clear} slug="cancel" />
+            <Button onClick={toggleEdit} icon="times" skin={ButtonStyle.CLEAR} slug="cancel" />
           </Controls>
         </div>
       ) : (
         <div>
           <StaticText>{props.value}</StaticText>
           <Controls>
-            <Button onClick={toggleEdit} icon="pencil" skin={Skin.clear} slug="edit" />
+            <Button onClick={toggleEdit} icon="pencil" skin={ButtonStyle.CLEAR} slug="edit" />
           </Controls>
         </div>
       )}

@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { Colors } from "@nx/style";
-import { Button, Skin, TextInput } from "@nx/ui";
+import { Button, ButtonStyle, TextInput } from "@nx/ui";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserAuth } from "../context/AuthContext";
@@ -35,7 +35,7 @@ const SignUpForm = () => {
         <TextInput slug="email" placeholder="Email" value={email} onChange={setEmail} />
         <TextInput slug="password" placeholder="Password" value={password} onChange={setPassword} />
         <TextInput slug="confirmpassword" placeholder="Confirm Password" value={confirmPassword} onChange={setConfirmPassword} />
-        <Button slug="signup" skin={Skin.secondary} name="Sign up" flex onClick={onSubmit} disabled={!email || !password || !confirmPassword || password !== confirmPassword}/>
+        <Button slug="signup" skin={ButtonStyle.SECONDARY} name="Sign up" flex onClick={onSubmit} disabled={!email || !password || !confirmPassword || password !== confirmPassword}/>
       </form>
     </Container>
   );

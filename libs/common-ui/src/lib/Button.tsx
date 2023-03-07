@@ -7,27 +7,32 @@ import { Label } from "./Label";
 
 interface Props {
   slug: string;
+  size?: ButtonSize;
   label?: string;
-  onClick: () => void;
+  onClick: (event: MouseEvent) => void;
   disabled?: boolean;
   name?: string;
-  skin?: Skin;
+  skin?: ButtonStyle;
   icon?: IconProp;
   flex?: boolean; 
+  stopPropagation?: boolean;
 }
 
 export const Button: React.FC<Props> = (props) => {
-  const onClick = (e: MouseEvent) => {
-    e.preventDefault();
+  const onClick = (event: MouseEvent) => {
+    if (props.stopPropagation) {
+      event.stopPropagation()
+    }
+    event.preventDefault();
     if (props.disabled) return false;
-    props.onClick();
+    props.onClick(event);
     return;
   };
 
   return (
     <Container flex={props.flex}>
       <Label slug={props.slug} label={props.label}/>
-      <ButtonElement onClick={onClick} skin={props.skin} disabled={props.disabled} flex={props.flex}>
+      <ButtonElement onClick={onClick} size={props.size} skin={props.skin} disabled={props.disabled} flex={props.flex}>
         {props.icon ? <FontAwesomeIcon icon={props.icon} /> : null}
         {props.name ? <span>{props.name}</span> : null}
       </ButtonElement>
@@ -49,25 +54,42 @@ const Container = styled("div")({
   return options;
 })
 
-export enum Skin {
-  clear = "CLEAR",
-  border = "BORDER",
-  primary= "PRIMARY",
-  secondary = "SECONDARY"
+export enum ButtonSize {
+  SMALL = "small",
+  DEFAULT = "default",
+  LARGE = "large"
+}
+
+export enum ButtonStyle {
+  CLEAR = "clear",
+  BORDER = "border",
+  PRIMARY= "primary",
+  SECONDARY = "secondary",
+  GRAY = "gray"
 }
 
 const backgroundColor = {
-  CLEAR: "transparent",
-  BORDER: "transparent",
-  PRIMARY: Colors.red,
-  SECONDARY: Colors.blue,
+  clear: "transparent",
+  border: "transparent",
+  primary: Colors.red,
+  secondary: Colors.blue,
+  gray: Colors.gray7
 };
 
 const borderColor = {
-  CLEAR: "transparent",
-  BORDER: Colors.gray8,
-  PRIMARY: Colors.red,
-  SECONDARY: Colors.blue,
+  clear: "transparent",
+  border: Colors.gray8,
+  primary: Colors.red,
+  secondary: Colors.blue,
+  gray: "transparent"
+};
+
+const buttonTextColor = {
+  clear: Colors.white,
+  border: Colors.white,
+  primary: Colors.white,
+  secondary: Colors.white,
+  gray: Colors.gray8
 };
 
 const ButtonElement = styled("button")({
@@ -88,8 +110,16 @@ const ButtonElement = styled("button")({
     opacity: 1
   },
 },
-(props: { skin?: Skin, disabled?: boolean, flex?: boolean }) => {
+(props: { skin?: ButtonStyle, disabled?: boolean, flex?: boolean, size?:ButtonSize }) => {
   let options = {}
+  if (props.size === ButtonSize.SMALL) {
+    options = {...options, 
+      fontSize: 8,
+      height: "2rem",
+      width: "2rem",
+      minWidth: "2rem",
+    }
+  }
   if (props.skin) {
     options = {...options,
       backgroundColor: backgroundColor[props.skin] || Colors.gray9,

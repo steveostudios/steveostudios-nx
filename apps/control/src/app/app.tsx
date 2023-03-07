@@ -15,10 +15,11 @@ import { fal } from "@fortawesome/pro-light-svg-icons";
 import { far } from "@fortawesome/pro-regular-svg-icons";
 import { fas } from "@fortawesome/pro-solid-svg-icons";
 import { fab } from "@fortawesome/free-brands-svg-icons";
-import { Modal } from '@nx/ui';
+import { ContextMenu, ContextMenuProps, Modal } from '@nx/ui';
 import { ModalContext } from './providers/ModalProvider';
 import { ModalProps } from '@nx/ui';
 import { Colors } from '@nx/style';
+import { ContextMenuContext } from './providers/ContextMenuProvider';
 library.add(fal, far, fas, fab);
 
 
@@ -31,6 +32,7 @@ const uid = (() => {
 
 export function App() { 
   const [modals, setModals] = useState<ReactElement[]>([]);
+  const [contextMenu, setContextMenu] = useState<ReactElement | null>();
 
   const actions = useMemo(
     () => ({
@@ -51,10 +53,27 @@ export function App() {
     []
   );
 
+  const ContextMenuActions = useMemo(
+    () => ({
+      addContextMenu(options: ContextMenuProps) {
+        console.log(options)
+        const close = () => {
+          console.log("close")
+          setContextMenu(null);
+        };
+
+        setContextMenu(<ContextMenu close={close} {...options} />);
+      }
+    }),
+    []
+  );
+
   return (
     <StyledApp>
       <Router>
           <ModalContext.Provider value={actions}>
+            <ContextMenuContext.Provider value={ContextMenuActions}>
+
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/signin" element={<SignIn />} />
@@ -63,6 +82,8 @@ export function App() {
               <Route path="/manage" element={<Manage />} /> 
             </Routes>
             {modals}
+            {contextMenu}
+            </ContextMenuContext.Provider>
           </ModalContext.Provider>
       </Router>
     </StyledApp>

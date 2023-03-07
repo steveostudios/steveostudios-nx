@@ -25,9 +25,7 @@ interface Props {
 
 const ThemeModal: React.FunctionComponent<Props> = (props) => {
   const { currentTheme, themes } = props.initialData;
-  
-  console.log(props)
-  
+    
   return (
     <Container>
       <SelectedTheme>

@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { Colors } from "@nx/style";
-import { Button, Skin, Toggle } from "@nx/ui";
+import { Button, ButtonStyle, Toggle } from "@nx/ui";
 import { onUpdateFileSettings, onUpdateUserSettings } from "@nx/firebase";
 import { Modes } from "@nx/shared-assets";
 
@@ -29,8 +29,8 @@ const MainHeader: React.FC<Props> = (props) => {
   return (
     <Container>
       <ModesContainer>
-        <Button slug="edit" name="Edit" skin={Skin.clear} icon="pencil" onClick={() => onChangeModes(Modes.EDIT)} />
-        <Button slug="play" name="Play" skin={Skin.clear} icon="play" onClick={() => onChangeModes(Modes.PLAY)} />
+        <Button slug="edit" name="Edit" skin={ButtonStyle.CLEAR} icon="pencil" onClick={() => onChangeModes(Modes.EDIT)} />
+        <Button slug="play" name="Play" skin={ButtonStyle.CLEAR} icon="play" onClick={() => onChangeModes(Modes.PLAY)} />
       </ModesContainer>
       <Toggles>
         <Toggle slug="sound" label="Sound" value={!!props.sounds} onChange={(value) => onChangeSounds(value)} column />

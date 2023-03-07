@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { Colors } from "@nx/style";
-import { Button, Skin, TextInput } from "@nx/ui";
+import { Button, ButtonStyle, TextInput } from "@nx/ui";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserAuth } from "../context/AuthContext";
@@ -33,7 +33,7 @@ const SignInForm = () => {
         {error && <ErrorMessage>{error}</ErrorMessage>}                                                                                          
         <TextInput slug="email" placeholder="Email" value={email} onChange={setEmail} />
         <TextInput slug="password" placeholder="Password" value={password} onChange={setPassword} />
-        <Button slug="signin" skin={Skin.secondary} flex name="Sign In" onClick={onSubmit} disabled={!email || !password}/>
+        <Button slug="signin" skin={ButtonStyle.SECONDARY} flex name="Sign In" onClick={onSubmit} disabled={!email || !password}/>
       </form>
     </Container>
   );

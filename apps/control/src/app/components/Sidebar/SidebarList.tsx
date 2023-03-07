@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { List } from "@nx/ui";
 import { onGetFiles } from "@nx/firebase";
 import { SimpleFile } from "@nx/shared-assets";
+import SidebarListFile from "./SidebarListFile";
 
 interface Props {
   userId: string;
@@ -14,17 +15,21 @@ const SidebarList: React.FC<Props> = (props) => {
   const [files, setFiles] = useState<SimpleFile[] | undefined>()
 
   useEffect(() => {
-    onGetFiles(props.userId, setFiles)
+    onGetFiles(props.userId, (data) => {
+      setFiles(data)
+    })
   }, [])
 
   const onSelectFile = (id: string) => {
     props.setSelectedFileId(id)
   }
-  
+
   return (
     <Container>
       <List hideBorder >
-        {files && files?.map(file => <Item key={file.id} className={file.id === props.selectedFileId ? "selected" : ""} onClick={() => onSelectFile(file.id)}>{file.name}</Item>)}
+        {files && files?.sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0).map(file => (
+          <SidebarListFile key={file.id} userId={props.userId} selected={file.id === props.selectedFileId} setSelectedFileId={onSelectFile} file={file} />
+          ))}
       </List>
     </Container>
   );
@@ -37,10 +42,4 @@ const Container = styled("div")({
   flex: 1,
 })
 
-const Item = styled("li")({
-  height: "4rem",
-  padding: "0 1rem",
-  display: "flex",
-  justifyContent: "flex-start",
-  alignItems: "center",
-})
+

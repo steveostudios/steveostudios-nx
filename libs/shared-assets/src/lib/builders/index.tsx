@@ -28,73 +28,85 @@ interface Builder {
   name: string;
   title: string;
   circle: string;
+  shortDescription: string;
 }
 
 export const builders:Builder[] =  [
   {
-    slug: "BOXES",
+    slug: "boxes",
     name: "Boxes",
     title: boxesTitle,
     circle: boxesCircle,
+    shortDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
   },
   {
-    slug: "COUNTDOWNMAKER",
+    slug: "countdownmaker",
     name: "Countdown Maker",
     title: countdownmakerTitle,
     circle: countdownmakerCircle,
+    shortDescription: "Nullam tincidunt fringilla vehicula."
   },
   {
-    slug: "EMOJIHUNT",
+    slug: "emojihunt",
     name: "EmojiHunt",
     title: emojihuntTitle,
     circle: emojihuntCircle,
+    shortDescription: "Suspendisse facilisis tempor lacus, vel dictum metus convallis vitae."
   },
   {
-    slug: "LEADERBOARD",
+    slug: "leaderboard",
     name: "Leaderboard",
     title: leaderboardTitle,
     circle: leaderboardCircle,
+    shortDescription: "Vivamus sagittis massa odio, vel iaculis lorem varius quis."
   },
   {
-    slug: "PHOTOFURY",
+    slug: "photofury",
     name: "Photo Fury",
     title: photofuryTitle,
     circle: photofuryCircle,
+    shortDescription: "Quisque eget sollicitudin ante, at iaculis quam."
   },
   {
-    slug: "PICKME",
-    name: "pickme",
+    slug: "pickme",
+    name: "Pickme",
     title: pickmeTitle,
     circle: pickmeCircle,
+    shortDescription: "Sed et venenatis mauris."
   },
   {
-    slug: "PIXELATE",
-    name: "pixelate",
+    slug: "pixelate",
+    name: "Pixelate",
     title: pixelateTitle,
     circle: pixelateCircle,
+    shortDescription: "Pellentesque nec hendrerit lorem, non luctus elit."
   },
   {
-    slug: "PRESENTER",
-    name: "presenter",
+    slug: "presenter",
+    name: "Presenter",
     title: presenterTitle,
     circle: presenterCircle,
+    shortDescription: "Nam quis bibendum nunc."
   },
   {
-    slug: "SURVEYSAYS",
-    name: "surveysays",
+    slug: "surveysays",
+    name: "Survey Says",
     title: surveysaysTitle,
     circle: surveysaysCircle,
+    shortDescription: "Nullam in magna et nibh elementum rhoncus."
   },
   {
-    slug: "TRIVIA",
+    slug: "trivia",
     name: "Trivia",
     title: triviaTitle,
     circle: triviaCircle,
+    shortDescription: "Aenean ac elementum neque."
   },
   {
-    slug: "WHEELOFDESTINY",
+    slug: "wheelofdestiny",
     name: "Wheel of Destiny",
     title: wheelofdestinyTitle,
     circle: wheelofdestinyCircle,
+    shortDescription: "Ut vel massa nec purus pretium hendrerit."
   },
 ];

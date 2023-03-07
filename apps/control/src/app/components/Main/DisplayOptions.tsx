@@ -37,7 +37,7 @@ const DisplayOptions: React.FC<Props> = (props) => {
   };
 
   const onInstructionsConfirm = (data: any) => {
-    onUpdateFile(props.selectedFileId, {'settings.instructionsContent': data.value})
+    onUpdateFile(props.selectedFileId, {'instructionsContent': data.value})
   };
 
   const onBackground = () => {
@@ -54,7 +54,7 @@ const DisplayOptions: React.FC<Props> = (props) => {
 
   const onBackgroundLiveUpdate = (data: any) => {
     if (!data.background) return;
-    onUpdateFile(props.selectedFileId, {'settings.background': data.background})
+    onUpdateFile(props.selectedFileId, {'background': data.background})
   };
 
   const onTheme = () => {
@@ -71,7 +71,7 @@ const DisplayOptions: React.FC<Props> = (props) => {
 
   const onThemeLiveUpdate = (data: any) => {
     if (!data.theme) return;
-      onUpdateFile(props.selectedFileId, {'settings.theme': data.theme})      
+      onUpdateFile(props.selectedFileId, {'theme': data.theme})      
   };
 
   return (
