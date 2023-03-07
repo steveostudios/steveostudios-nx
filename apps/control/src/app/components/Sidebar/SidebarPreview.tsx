@@ -8,7 +8,7 @@ const SidebarPreview: React.FC<Props> = (props) => {
 
   return (
     <Container>
-      <IFrame src={`http://localhost:5201/${props.userId}`}
+      <IFrame src={`${process.env.NX_DISPLAY_HOST}${props.userId}`}
         title="preview"
         width={256}
         height={144}
