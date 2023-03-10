@@ -46,7 +46,7 @@ const Container = styled("div")({
   let options = {}
   if (props.flex) {
     options = {...options,
-      flex: 1,
+      flex: "1 0",
       width: "100%"
     }
   }
@@ -120,6 +120,16 @@ const ButtonElement = styled("button")({
       minWidth: "2rem",
     }
   }
+
+  if (props.size === ButtonSize.LARGE) {
+    options = {...options, 
+      fontSize: 18,
+      height: "8rem",
+      minWidth: "8rem",
+      padding: "4rem"
+    }
+  }
+
   if (props.skin) {
     options = {...options,
       backgroundColor: backgroundColor[props.skin] || Colors.gray9,
@@ -136,7 +146,7 @@ const ButtonElement = styled("button")({
   }
   if (props.flex) {
     options = {...options,
-      flex: 1,
+      flex: "1 0",
       width: "100%"
     }
   }

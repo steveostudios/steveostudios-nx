@@ -9,6 +9,13 @@ export enum NextWinnerType {
   RANDOM = "random",
   PRESELECTED = "preselected",
 }
+
+export enum GameState {
+  ADDMORE = "addmore",
+  READY = "ready",
+  SPINNING = "spinning",
+  WINNER = "winner"
+}
 export interface Item {
   id: string;
   name: string;
@@ -31,6 +38,8 @@ export interface File {
   background: number;
   theme: number;
   instructionsContent: string;
+  spinCycle: string[];
+  gameState: GameState
 }
 
 export interface SimpleFile {

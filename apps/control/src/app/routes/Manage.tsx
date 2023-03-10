@@ -7,10 +7,12 @@ import Sidebar from "../components/Sidebar/Sidebar";
 import PickmeEdit from "../components/builders/pickme/Edit";
 import PickmePlay from "../components/builders/pickme/Play";
 import { Colors } from "@nx/style";
+import { useFirebaseAuth } from "../context/AuthContext";
 
 const Manage = () => {
   const [file, setFile] = useState<File | null>() // MtEyqt2j6NLs5nO8vIOA
-  const userId = "iBfXqM9uuEWBMv8bEARIaQgwJFI3";
+  // const userId = "iBfXqM9uuEWBMv8bEARIaQgwJFI3";
+  const {user} = useFirebaseAuth()
   const [userSettings, setUserSettings] = useState<UserSettings>({  
     titleGraphic: false,
     sounds: true,
@@ -20,8 +22,8 @@ const Manage = () => {
   })
 
   useEffect(() => {
-    if (userId) onGetUserSettings(userId, (data) => setUserSettings({...data}))
-   }, [userId])
+    if (user && user.uid) onGetUserSettings(user.uid, (data) => setUserSettings({...data}))
+   }, [user])
 
 
   useEffect(() => {
@@ -33,14 +35,16 @@ const Manage = () => {
   }, [userSettings.selectedFileId])
 
   const onSelectFile = (fileId:string) => {
-    onSetFile(userId, fileId);
+    if (user && user.uid)
+    onSetFile(user.uid, fileId);
   }
 
+  if (!user?.uid) return <div>no user</div>
   return (
-    <Container>
-      <Sidebar userId={userId} selectedFileId={userSettings?.selectedFileId} setSelectedFileId={onSelectFile} />
+      <Container>
+      <Sidebar userId={user.uid} selectedFileId={userSettings?.selectedFileId} setSelectedFileId={onSelectFile} />
       {file && userSettings.selectedFileId ?
-        <Main userId={userId} selectedFileId={userSettings?.selectedFileId} titleGraphic={userSettings?.titleGraphic} sounds={userSettings?.sounds} instructions={userSettings?.instructions}>
+        <Main userId={user.uid} selectedFileId={userSettings?.selectedFileId} titleGraphic={userSettings?.titleGraphic} sounds={userSettings?.sounds} instructions={userSettings?.instructions}>
           {userSettings.selectedFileId && userSettings?.selectedMode === Modes.EDIT && 
             <PickmeEdit file={file} />
           }

@@ -1,16 +1,16 @@
-import { ReactFragment, ReactNode } from "react";
+import { ReactFragment, ReactNode, useContext } from "react";
 import { Navigate } from "react-router-dom";
-import { UserAuth } from "../context/AuthContext";
+import { AuthContextProvider, useFirebaseAuth } from "../context/AuthContext";
 
 interface Props {
   children: any;
 }
 
 const ProtectedRoute: React.FC<Props> = ({children}) => {
-  const {user} = UserAuth()
+  const {user} = useFirebaseAuth()
   console.log(user)
 
-  if (!user) {
+  if (user === undefined) {
     return <Navigate to="/" />
   } 
 

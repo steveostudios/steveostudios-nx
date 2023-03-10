@@ -3,7 +3,7 @@ import { Colors } from "@nx/style";
 import { Button, ButtonStyle, TextInput } from "@nx/ui";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserAuth } from "../context/AuthContext";
+import { useFirebaseAuth } from "../context/AuthContext";
 import { getErrorMessage } from "../helpers/error";
 
 const SignUpForm = () => {
@@ -13,8 +13,7 @@ const SignUpForm = () => {
   const [error, setError] = useState('')
 
   const navigate = useNavigate()
-  const {createUser} = UserAuth();
-
+  const { createUser } = useFirebaseAuth();
   const onSubmit = async () => {
     setError('');
     console.log(email, password)
@@ -33,8 +32,8 @@ const SignUpForm = () => {
       {error && <ErrorMessage>{error}</ErrorMessage>}                                                                                          
       <form onSubmit={onSubmit}>
         <TextInput slug="email" placeholder="Email" value={email} onChange={setEmail} />
-        <TextInput slug="password" placeholder="Password" value={password} onChange={setPassword} />
-        <TextInput slug="confirmpassword" placeholder="Confirm Password" value={confirmPassword} onChange={setConfirmPassword} />
+        <TextInput slug="password" type="password" placeholder="Password" value={password} onChange={setPassword} />
+        <TextInput slug="confirmpassword" type="password" placeholder="Confirm Password" value={confirmPassword} onChange={setConfirmPassword} />
         <Button slug="signup" skin={ButtonStyle.SECONDARY} name="Sign up" flex onClick={onSubmit} disabled={!email || !password || !confirmPassword || password !== confirmPassword}/>
       </form>
     </Container>

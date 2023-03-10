@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
 import { Colors } from "@nx/style";
 import { Button, ButtonStyle, TextInput } from "@nx/ui";
-import { useState } from "react";
+import {  useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserAuth } from "../context/AuthContext";
+import { useFirebaseAuth } from "../context/AuthContext";
 import { getErrorMessage } from "../helpers/error";
 
 const SignInForm = () => {
@@ -12,12 +12,13 @@ const SignInForm = () => {
   const [error, setError] = useState('')
 
   const navigate = useNavigate()
-  const {login} = UserAuth();
+  const { login } = useFirebaseAuth();
 
   const onSubmit = async () => {
     setError('');
     console.log(email, password)
     try{
+      // console.log(user)
       await login(email, password)
       navigate("/manage")
     } catch (error) {
@@ -32,7 +33,7 @@ const SignInForm = () => {
       <form>
         {error && <ErrorMessage>{error}</ErrorMessage>}                                                                                          
         <TextInput slug="email" placeholder="Email" value={email} onChange={setEmail} />
-        <TextInput slug="password" placeholder="Password" value={password} onChange={setPassword} />
+        <TextInput type="password" slug="password" placeholder="Password" value={password} onChange={setPassword} />
         <Button slug="signin" skin={ButtonStyle.SECONDARY} flex name="Sign In" onClick={onSubmit} disabled={!email || !password}/>
       </form>
     </Container>

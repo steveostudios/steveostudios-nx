@@ -1,11 +1,11 @@
 import styled from "@emotion/styled";
 import { Button } from "@nx/ui";
 import { useNavigate } from "react-router-dom";
-import { UserAuth } from "../context/AuthContext";
+import { useFirebaseAuth } from "../context/AuthContext";
 
 
 const Account = () => {
-  const {user, logout} = UserAuth()
+  const {user, logout} = useFirebaseAuth()
   const navigate = useNavigate()
 
   const onSignOut = () => {

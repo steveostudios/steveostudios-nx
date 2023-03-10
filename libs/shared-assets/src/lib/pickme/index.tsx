@@ -1,5 +1,5 @@
 import { Option } from "@nx/ui";
-import { Builders, File, NextWinnerType } from "../model";
+import { Builders, File, GameState, NextWinnerType } from "../model";
 import thumb001 from "./theme-thumb001.png";
 import thumb002 from "./theme-thumb002.png";
 import thumb003 from "./theme-thumb003.png";
@@ -29,7 +29,9 @@ export const pickmeDefaultFile: Omit<File, "id"> = {
   instructionsContent: "",
   theme: 2,
   background: 3,
-  items: {}
+  items: {},
+  spinCycle: [],
+  gameState: GameState.ADDMORE
 }
 
 interface Themes {
@@ -96,3 +98,4 @@ export const pickmeWeights: Option[] = [
   { name: "Least Likely to win", value: 1 },
   { name: "Never win", value: 0 },
 ];
+

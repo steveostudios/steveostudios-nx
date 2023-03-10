@@ -2,7 +2,7 @@ export const hello = "hello world";
 
 // import { Builders } from "@nx/shared-assets";
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { collection, getFirestore, onSnapshot, doc, where, query, updateDoc, addDoc, arrayUnion, arrayRemove, deleteDoc, deleteField } from "firebase/firestore";
 import {Builders, File, SimpleFile, UserSettings} from "@nx/shared-assets"
 
@@ -22,7 +22,7 @@ const app = initializeApp(firebaseConfig);
 // Initialize Cloud Firestore and get a reference to the service
 const db = getFirestore(app);
 
-// export const auth = getAuth(app)
+export const auth = getAuth(app)
 
 interface FileTest {
   name: string;
@@ -37,6 +37,20 @@ interface UserFile {
 interface UserFileMap {
   [key:string]: UserFile
 }
+
+// Authentication
+export const createUser = (email:string, password:string) => {
+  return createUserWithEmailAndPassword(auth, email, password)
+}
+
+export const login = (email: string, password: string) => {
+  return signInWithEmailAndPassword(auth, email, password)
+}
+
+export const logout = () => {
+  return signOut(auth)
+}
+
 
 // Files
 export const onGetFiles = async (userId: string, updateState: (data: SimpleFile[] | undefined) => void) => {

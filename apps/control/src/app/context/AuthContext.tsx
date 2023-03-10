@@ -1,70 +1,51 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, User} from 'firebase/auth'
-import { auth } from "../integrations/firebase";
+import * as React from "react";
+import { createUser, login, logout, auth } from "@nx/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import firebase from "firebase/auth"
 
-type IUserContext = {
-  user: User | null | undefined;
-  createUser: (email: string, password: string) => void;
-  logout: () => void;
-  login: (email: string, password: string) => void;
-}
-
-export function createCtx<ContextType>() {
-  const ctx = React.createContext<ContextType | undefined>(undefined);
-  function useCtx() {
-    const c = React.useContext(ctx);
-    if (!c) throw new Error("useCtx must be inside a Provider with a value");
-    return c;
-  }
-  return [useCtx, ctx.Provider] as const;
-}
-
-// const defaultState = {
-//   user: null,
-//   createUser: () => {},
-//   logout: () => {},
-//   login: () => {}
-// }
-
-export const [UserAuth, CtxProvider] = createCtx<IUserContext>()
+type User = firebase.User | null;
+type ContextState = { 
+  user: User, 
+  login: (email: string, password: string) => void, 
+  createUser: (email: string, password: string) => void,
+  logout: () => void
+};
 
 type IProvider = {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
+const AuthContext =
+  React.createContext<ContextState | undefined>(undefined);
 
-export const AuthContextProvider = ({children}: IProvider) => {
-  const [user, setUser] = useState<User | null>()
+const AuthContextProvider = ({children}: IProvider) => {
+  const [user, setUser] = React.useState<User | null>(null);
+  const value = { user, createUser, login, logout };
 
-  console.log(user)
-
-  const createUser = (email:string, password:string) => {
-    return createUserWithEmailAndPassword(auth, email, password)
-  }
-
-  const logout = () => {
-    return signOut(auth)
-  }
-
-  const login = (email: string, password: string) => {
-    return signInWithEmailAndPassword(auth, email, password)
-  }
-
-  useEffect(() => {
+  React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      console.log("-- Auth Changed --")
-      console.log(currentUser)
+      console.log(currentUser);
       setUser(currentUser)
-    })
-    return unsubscribe()
-  }, [])
+    });
+    return unsubscribe;
+  }, []);
 
   return (
-    <CtxProvider value={{user, createUser, logout, login}}>
+    <AuthContext.Provider value={value}>
       {children}
-    </CtxProvider>
-)}
+    </AuthContext.Provider>
+  );
+};
 
-// export const UserAuth = () => {
-//   return useContext(UserContext)
-// }
+function useFirebaseAuth() {
+  const context = React.useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error(
+      "useFirebaseAuth must be used within a FirebaseAuthProvider"
+    );
+  }
+  return context;
+}
+
+export { AuthContextProvider, useFirebaseAuth };
+ 

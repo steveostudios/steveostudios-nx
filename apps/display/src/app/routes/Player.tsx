@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
 import {Colors} from "@nx/style"
-import { Background, Instructions, Title, Builders, File, Modes, UserSettings, PickmeTheme, NoFileSelected } from "@nx/shared-assets";
+import { Background, Instructions, Title, Builders, File, Modes, UserSettings, PickmeTheme, NoFileSelected, GameState, Item, NextWinnerType } from "@nx/shared-assets";
 import { onGetFile, onGetUserSettings} from "@nx/firebase";
 import { useParams } from "react-router-dom";
 
@@ -15,7 +15,8 @@ export const Player: React.FC = () => {
     selectedMode: Modes.EDIT,
     selectedFileId: null
   })
-
+  const [value, setValue] = useState<string>("");
+  
   useEffect(() => {
     if (userId) onGetUserSettings(userId, (data) => setUserSettings({...data}))
    }, [userId])
@@ -28,13 +29,67 @@ export const Player: React.FC = () => {
     }
   }, [userSettings.selectedFileId])
 
+  const [index, setIndex] = useState(0);
+
+  // React.useEffect(() => {
+  //   if (file?.items.length && file.spinCycle.length && file.gameState === GameState.SPINNING) {
+  //   const timerId = setInterval(
+  //     () => setIndex((i) => (i + 1) % file.spinCycle.length), // <-- increment index
+  //     200
+  //     );
+  //     console.log(index)
+  //   return () => clearInterval(timerId);
+  // }
+  // }, [file]);
+
+  // React.useEffect(() => {
+  //   setMediaItem(file?.items[file.spinCycle[index]]); // <-- update media state when index updates
+  // }, [index]);
+
+  const [counter, setCounter] = useState(0);
+
+  // useEffect(() => {
+    
+  //   if (file?.gameState === GameState.SPINNING) {
+  //   } else {
+  //     setCounter(0)
+  //     clearInterval(timer)
+  //   }
+  //   return () => clearInterval(timer);
+  // }, [file?.gameState]);
+  
+  
+  useEffect(() => {
+    let timer: ReturnType<typeof setInterval> | undefined;
+    if (file) {
+      
+      if (file?.gameState === GameState.ADDMORE) setValue("Add More")
+      if (file?.gameState === GameState.READY) setValue("Get Ready")
+      if (file?.gameState === GameState.SPINNING) {
+
+        timer = setInterval(() => {
+          setCounter(prevCount => prevCount + 1);
+          setValue(Object.entries(file.items)[counter % Object.entries(file.items).length][1].name)
+        }, 100);
+      }
+      if (file?.gameState === GameState.WINNER) {
+        setCounter(0)
+        clearInterval(timer)
+        if (file.nextWinnerType === NextWinnerType.PRESELECTED) {
+          setValue(file.items[file.nextPreselectedId || ''].name)
+        } else {
+          setValue(file.items[file.nextRandomId ||''].name)
+        }
+      }
+      return () => clearInterval(timer);
+    }
+  }, [file?.gameState, counter])
 
   return (
     <Container>
       {file && userSettings?.selectedFileId ? <>
         <Background value={file.background} />
-        <PickmeTheme value="test" theme={file.theme} />
-        <div>Game content</div>
+        <PickmeTheme value={value} theme={file.theme} />
         <Instructions active={!!userSettings?.instructions} value={file.instructionsContent} showBackground/>
         <Title active={!!userSettings?.titleGraphic} value={file.name} builder={Builders.PICKME}/>
       </> :

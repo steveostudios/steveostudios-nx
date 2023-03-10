@@ -71,20 +71,23 @@ export function App() {
   return (
     <StyledApp>
       <Router>
-          <ModalContext.Provider value={actions}>
-            <ContextMenuContext.Provider value={ContextMenuActions}>
-
+        <ModalContext.Provider value={actions}>
+          <ContextMenuContext.Provider value={ContextMenuActions}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/signin" element={<SignIn />} />
               <Route path="/signup" element={<SignUp />} />              
               <Route path="/account" element={<ProtectedRoute><Account /></ProtectedRoute>} />
-              <Route path="/manage" element={<Manage />} /> 
+                <Route path="/manage" element={
+              <ProtectedRoute>
+                <Manage />
+              </ProtectedRoute>
+                } /> 
             </Routes>
             {modals}
             {contextMenu}
-            </ContextMenuContext.Provider>
-          </ModalContext.Provider>
+          </ContextMenuContext.Provider>
+        </ModalContext.Provider>
       </Router>
     </StyledApp>
   );
