@@ -29,35 +29,7 @@ export const Player: React.FC = () => {
     }
   }, [userSettings.selectedFileId])
 
-  const [index, setIndex] = useState(0);
-
-  // React.useEffect(() => {
-  //   if (file?.items.length && file.spinCycle.length && file.gameState === GameState.SPINNING) {
-  //   const timerId = setInterval(
-  //     () => setIndex((i) => (i + 1) % file.spinCycle.length), // <-- increment index
-  //     200
-  //     );
-  //     console.log(index)
-  //   return () => clearInterval(timerId);
-  // }
-  // }, [file]);
-
-  // React.useEffect(() => {
-  //   setMediaItem(file?.items[file.spinCycle[index]]); // <-- update media state when index updates
-  // }, [index]);
-
   const [counter, setCounter] = useState(0);
-
-  // useEffect(() => {
-    
-  //   if (file?.gameState === GameState.SPINNING) {
-  //   } else {
-  //     setCounter(0)
-  //     clearInterval(timer)
-  //   }
-  //   return () => clearInterval(timer);
-  // }, [file?.gameState]);
-  
   
   useEffect(() => {
     let timer: ReturnType<typeof setInterval> | undefined;
@@ -89,7 +61,7 @@ export const Player: React.FC = () => {
     <Container>
       {file && userSettings?.selectedFileId ? <>
         <Background value={file.background} />
-        <PickmeTheme value={value} theme={file.theme} />
+        <PickmeTheme value={value} theme={file.theme} isWinning={file.gameState === GameState.WINNER}/>
         <Instructions active={!!userSettings?.instructions} value={file.instructionsContent} showBackground/>
         <Title active={!!userSettings?.titleGraphic} value={file.name} builder={Builders.PICKME}/>
       </> :

@@ -6,22 +6,17 @@ import { pickmeThemes } from ".";
 interface Props {
   theme: number;
   value: string;
+  isWinning: boolean;
 }
 
 export const PickmeTheme: React.FC<Props> = (props) => {
   const theme = pickmeThemes.find(item => item.id === props.theme)
   return (
     <SVG viewBox="0 0 1920 1080" >
-      {theme && <Image
-        x="0"
-        y="0"
-        width="1920"
-        height="1080"
-        href={theme?.file}
-      ></Image>    }
-       <Text x="50%" y="50%">
-        {props.value}
-      </Text></SVG>
+      {theme && <Image x="0" y="0" width="1920" height="1080" href={theme?.file} />}
+      <Text x="50%" y="50%">{props.value}</Text>
+      {props.isWinning && <Rect x="0" y="0" width="1920" height="1080" />}
+    </SVG>
   );
 };
 
@@ -44,3 +39,17 @@ const Text = styled("text")({
 })
 
 const Image = styled("image")({});
+
+const Rect = styled("rect")({
+  fill: "none",
+  strokeWidth: "4rem",
+  stroke: "yellow",
+  animation: "blink 0.5s",
+  animationIterationCount: 3,
+  animationTimingFunction: "step-end",
+  "@keyframes blink":{ 
+    "50%": { 
+      opacity: 0
+    }
+  }
+})
