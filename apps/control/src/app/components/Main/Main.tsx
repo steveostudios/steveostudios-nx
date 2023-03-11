@@ -18,7 +18,7 @@ const Main: React.FC<Props> = (props) => {
       <MainHeader userId={props.userId} selectedFileId={props.selectedFileId} titleGraphic={props.titleGraphic} sounds={props.sounds} instructions={props.instructions} />
       <Wrapper>
         {props.children}
-        </Wrapper>
+      </Wrapper>
     </Container>
   );
 };

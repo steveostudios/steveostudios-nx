@@ -1,21 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled"
 import {Colors} from "@nx/style";
-import { pickmeThemes } from ".";
+import { GameState, NextWinnerType, PickmeFile, pickmeThemes, wheelThemes } from "@nx/shared-assets";
 
 interface Props {
-  theme: number;
-  value: string;
-  isWinning: boolean;
+  file: PickmeFile;
 }
 
-export const PickmeTheme: React.FC<Props> = (props) => {
-  const theme = pickmeThemes.find(item => item.id === props.theme)
+export const Wheel: React.FC<Props> = (props) => {
+const {file} = props;
+
+  const theme = wheelThemes.find(item => item.id === file.theme)
+
   return (
     <SVG viewBox="0 0 1920 1080" >
-      {theme && <Image x="0" y="0" width="1920" height="1080" href={theme?.file} />}
-      <Text x="50%" y="50%">{props.value}</Text>
-      {props.isWinning && <Rect x="0" y="0" width="1920" height="1080" />}
+      <Text x="50%" y="50%">{Object.entries(file.items).map(([id, item]) => item.name)}</Text>
+      {file.gameState === GameState.WINNER && <Rect x="0" y="0" width="1920" height="1080" />}
     </SVG>
   );
 };
@@ -38,7 +38,6 @@ const Text = styled("text")({
   dominantBaseline: "middle"
 })
 
-const Image = styled("image")({});
 
 const Rect = styled("rect")({
   fill: "none",

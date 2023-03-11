@@ -1,5 +1,5 @@
 import { Option } from "@nx/ui";
-import { Builders, File, GameState, NextWinnerType } from "../model";
+import { Builders, File, GameState, Item, NextWinnerType } from "../model";
 import thumb001 from "./theme-thumb001.png";
 import thumb002 from "./theme-thumb002.png";
 import thumb003 from "./theme-thumb003.png";
@@ -17,7 +17,24 @@ import file006 from "./theme-file006.png";
 import file007 from "./theme-file007.png";
 import file008 from "./theme-file008.png";
 
-export const pickmeDefaultFile: Omit<File, "id"> = {
+export interface PickmeFile extends File {
+  items:{ [id: string]: PickmeItem};
+  preselectedIds: string[];
+  nextRandomId: string | null;
+  nextPreselectedId: string | null;
+  nextWinnerType: NextWinnerType;
+  showPicker: boolean;
+  hideLastItem: boolean;
+  theme: number;
+  spinCycle: string[];
+  gameState: GameState
+}
+
+export interface PickmeItem extends Item {
+  weight: number;
+}
+
+export const pickmeDefaultFile: Omit<PickmeFile, "id"> = {
   builder: Builders.PICKME,
   name: "",
   preselectedIds: [],
@@ -34,14 +51,14 @@ export const pickmeDefaultFile: Omit<File, "id"> = {
   gameState: GameState.ADDMORE
 }
 
-interface Themes {
+export interface PickmeTheme {
   id: number;
   name: string;
   thumb: string;
   file: string;
 }
 
-export const pickmeThemes: Themes[] = [
+export const pickmeThemes: PickmeTheme[] = [
   {
     id: 1,
     name: "Marquee",

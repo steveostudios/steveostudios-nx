@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { onGetFile, onGetUserSettings, onSetFile } from "@nx/firebase"
-import { File, Modes, UserSettings } from "@nx/shared-assets";
+import { Builders, File, Modes, UserSettings, AnyFile, WheelFile, PickmeFile, BoxesFile } from "@nx/shared-assets";
 import { useEffect, useState } from "react";
 import Main from "../components/Main/Main";
 import Sidebar from "../components/Sidebar/Sidebar";
@@ -8,9 +8,12 @@ import PickmeEdit from "../components/builders/pickme/Edit";
 import PickmePlay from "../components/builders/pickme/Play";
 import { Colors } from "@nx/style";
 import { useFirebaseAuth } from "../context/AuthContext";
+import WheelEdit from "../components/builders/wheel/Edit";
+import WheelPlay from "../components/builders/wheel/Play";
+import BoxesEdit from "../components/builders/boxes/Edit";
 
 const Manage = () => {
-  const [file, setFile] = useState<File | null>() // MtEyqt2j6NLs5nO8vIOA
+  const [file, setFile] = useState<AnyFile | null>() // MtEyqt2j6NLs5nO8vIOA
   // const userId = "iBfXqM9uuEWBMv8bEARIaQgwJFI3";
   const {user} = useFirebaseAuth()
   const [userSettings, setUserSettings] = useState<UserSettings>({  
@@ -40,17 +43,40 @@ const Manage = () => {
   }
 
   if (!user?.uid) return <div>no user</div>
+
+  const getMain = () => {
+    if (userSettings.selectedFileId) {
+      if (file?.builder === Builders.PICKME) {
+        if (userSettings.selectedMode === Modes.EDIT) {
+          return <PickmeEdit file={file as PickmeFile} />
+        } else {
+          return <PickmePlay file={file as PickmeFile} />
+        }
+      }
+      if (file?.builder === Builders.WHEEL) {
+        if (userSettings.selectedMode === Modes.EDIT) {
+          return <WheelEdit file={file as WheelFile} />
+        } else {
+          return <WheelPlay file={file as WheelFile} />
+        }
+      }
+      if (file?.builder === Builders.BOXES) {
+        if (userSettings.selectedMode === Modes.EDIT) {
+          return <BoxesEdit file={file as BoxesFile} />
+        } else {
+          return <WheelPlay file={file as WheelFile} />
+        }
+      }
+    }
+    return null;
+  }
+
   return (
       <Container>
       <Sidebar userId={user.uid} selectedFileId={userSettings?.selectedFileId} setSelectedFileId={onSelectFile} />
       {file && userSettings.selectedFileId ?
         <Main userId={user.uid} selectedFileId={userSettings?.selectedFileId} titleGraphic={userSettings?.titleGraphic} sounds={userSettings?.sounds} instructions={userSettings?.instructions}>
-          {userSettings.selectedFileId && userSettings?.selectedMode === Modes.EDIT && 
-            <PickmeEdit file={file} />
-          }
-          {userSettings.selectedFileId && userSettings?.selectedMode === Modes.PLAY && 
-            <PickmePlay file={file} />
-          }
+          {getMain()}
         </Main>
       :
       <NoFileSelected>Select or create a file from the left.</NoFileSelected>}

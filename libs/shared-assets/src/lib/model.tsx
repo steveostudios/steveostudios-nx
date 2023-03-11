@@ -1,3 +1,7 @@
+import { BoxesFile, BoxesTheme } from "./boxes";
+import { PickmeFile, PickmeTheme } from "./pickme";
+import { WheelFile, WheelTheme } from "./wheel";
+
 // Types
 export enum Builders {
   PICKME = "pickme",
@@ -20,27 +24,20 @@ export interface Item {
   id: string;
   name: string;
   visible: boolean;
-  weight: number;
   order: number;
 }
 
 export interface File {
   id: string;
   builder: Builders;
-  items:{ [id: string]: Item};
   name: string;
-  preselectedIds: string[];
-  nextRandomId: string | null;
-  nextPreselectedId: string | null;
-  nextWinnerType: NextWinnerType;
-  showPicker: boolean;
-  hideLastItem: boolean;
   background: number;
-  theme: number;
   instructionsContent: string;
-  spinCycle: string[];
-  gameState: GameState
 }
+
+export type AnyFile = PickmeFile | WheelFile | BoxesFile;
+
+export type AnyTheme = PickmeTheme | WheelTheme | BoxesTheme;
 
 export interface SimpleFile {
   id: string;

@@ -1,74 +1,67 @@
 import styled from "@emotion/styled";
 import { Colors } from "@nx/style";
 
-export interface ThemeModalData {
-  theme: number;
+export interface PositionModalData {
+  position: number;
 }
 
-interface Background {
-  id: number;
-  name: string;
-  thumb: string;
-  file: string;
-}
-
-export interface ThemeModalInitialData {
-  currentTheme: number;
-  themes: any[];
+export interface PositionModalInitialData {
+  currentPosition: number;
+  positions: any[];
 }
 
 interface Props {
-  data: ThemeModalData;
-  initialData: ThemeModalInitialData;
-  setData: ({theme}: ThemeModalData)  => void;
+  data: PositionModalData;
+  initialData: PositionModalInitialData;
+  setData: ({position}: PositionModalData)  => void;
 }
 
-const ThemeModal: React.FunctionComponent<Props> = (props) => {
-  const { currentTheme, themes } = props.initialData;
+const PositionModal: React.FunctionComponent<Props> = (props) => {
+  const { currentPosition, positions } = props.initialData;
     
   return (
     <Container>
       <SelectedTheme>
-        {props.data.theme ? (
+        {props.data.position ? (
           <img
             src={
-              themes.find(
-                (theme) => theme.id === props.data.theme
+              positions.find(
+                (position) => position.id === props.data.position
               ).thumb
             }
             alt={
-              themes.find(
-                (theme) => theme.id === props.data.theme
+              positions.find(
+                (position) => position.id === props.data.position
               ).name
             }
           />
         ) : (
           <img
             src={
-              themes.find(
-                (theme) => theme.id === currentTheme
+              positions.find(
+                (position) => position.id === currentPosition
               ).thumb
             }
             alt={
-              themes.find(
-                (theme) => theme.id === currentTheme
+              positions.find(
+                (position) => position.id === currentPosition
               ).name
             }
           />
         )}
       </SelectedTheme>
       <Thumbs>
-        {themes.map((theme) => (
+        {positions.map((position) => (
           <Thumb
-            key={theme.id}
+            key={position.id}
             selected={
-              props.data.theme
-                ? theme.id === props.data.theme
-                : theme.id === currentTheme
+              props.data.position
+                ? position.id === props.data.position
+                : position.id === currentPosition
             }
-            onClick={() => props.setData({ theme: theme.id })}
+            onClick={() => props.setData({ position: position.id })}
           >
-            <img src={theme.thumb} alt={theme.name} />
+            <img src={position.thumb} alt={position.name} />
           </Thumb>
         ))}
       </Thumbs>
@@ -76,7 +69,7 @@ const ThemeModal: React.FunctionComponent<Props> = (props) => {
   );
 };
 
-export default ThemeModal;
+export default PositionModal;
 
 const Container = styled("div")({
 

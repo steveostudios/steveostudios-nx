@@ -58,7 +58,7 @@ export const onGetFiles = async (userId: string, updateState: (data: SimpleFile[
   onSnapshot(userRef, snapshot => {
     const data = snapshot.data();
     updateState(
-      Object.entries(data?.files as UserFileMap).map(([id, item]) => ({id, name: item.name, builder: Builders.PICKME})) || undefined
+      Object.entries(data?.files as UserFileMap).map(([id, item]) => ({id, name: item.name, builder: item.builder as Builders})) || undefined
     )
   })
 }

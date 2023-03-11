@@ -2,7 +2,7 @@ import { MouseEvent, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { Button, ButtonSize, List, ButtonStyle } from "@nx/ui";
 import { onDeleteFile, onGetFiles, onRenameFile, onSetFile } from "@nx/firebase";
-import { SimpleFile } from "@nx/shared-assets";
+import { builders, SimpleFile } from "@nx/shared-assets";
 import { useContextMenu } from "../../providers/ContextMenuProvider";
 import { useModals } from "../../providers/ModalProvider";
 import RenameFileModal, { RenameFileModalData } from "../modals/RenameFileModal";
@@ -66,7 +66,10 @@ const SidebarListFile: React.FC<Props> = (props) => {
 
   return (
     <Container key={props.file.id} className={props.selected ? "selected" : ""} onClick={() => props.setSelectedFileId(props.file.id)}>
+      <div>
+      <img src={builders.find(item => item.slug === props.file.builder)?.circle} alt={props.file.builder} />
       {props.file.name}
+      </div>
       <Button slug="options" icon="ellipsis-h" skin={ButtonStyle.GRAY} size={ButtonSize.SMALL} stopPropagation onClick={(event) => onContextMenu(event)} />
     </Container>
   );
@@ -80,4 +83,12 @@ const Container = styled("li")({
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
+  "> div": {
+    display: "flex",
+    alignItems: "center",
+    img: {
+      width: "2rem",
+      marginRight: "1rem"
+    }
+  }
 })

@@ -103,8 +103,8 @@ export const builders:Builder[] =  [
     shortDescription: "Aenean ac elementum neque."
   },
   {
-    slug: "wheelofdestiny",
-    name: "Wheel of Destiny",
+    slug: "wheel",
+    name: "Wheel",
     title: wheelofdestinyTitle,
     circle: wheelofdestinyCircle,
     shortDescription: "Ut vel massa nec purus pretium hendrerit."

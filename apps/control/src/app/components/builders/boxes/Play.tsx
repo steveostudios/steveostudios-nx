@@ -1,16 +1,16 @@
 import styled from "@emotion/styled";
 import { ArrayAction, onUpdateArray, onUpdateFile } from "@nx/firebase"
 import { Colors, Shadows } from "@nx/style";
-import { File, GameState, Item, NextWinnerType, PickmeFile, pickmeWeights } from "@nx/shared-assets";
+import { File, GameState, Item, NextWinnerType, pickmeWeights, WheelFile } from "@nx/shared-assets";
 import {Button, List, ButtonStyle, Select, LockedInput, Toggle, TextInput, ButtonSize} from "@nx/ui"
 import { useEffect, useRef, useState } from "react";
 
 interface Props {
-  file: PickmeFile;
+  file: WheelFile;
 }
 
 
-const PickmePlay: React.FC<Props> = (props) => {
+const WheelPlay: React.FC<Props> = (props) => {
   const ref = useRef<HTMLDivElement>(null);
   const [search, setSearch] = useState("")
   const [showPreselectAdd, setShowPreselectAdd] = useState(false);
@@ -189,7 +189,7 @@ const PickmePlay: React.FC<Props> = (props) => {
   );
 };
 
-export default PickmePlay;
+export default WheelPlay;
 
 const SectionTwoColumn = styled("div")({
   display: "flex",

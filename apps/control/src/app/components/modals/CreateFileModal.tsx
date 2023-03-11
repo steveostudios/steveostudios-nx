@@ -19,7 +19,7 @@ const CreateFileModal: React.FunctionComponent<Props> = (props) => {
     <Container>
       <BuilderList>
         {builders.map(builder => 
-          <Builder key={builder.slug} onClick={(name) => props.setData({...props.data, builder: builder.slug})} disabled={builder.slug !== "pickme"} selected={builder.slug === props.data.builder}>
+          <Builder key={builder.slug} onClick={(name) => props.setData({...props.data, builder: builder.slug})} disabled={builder.slug !== Builders.PICKME && builder.slug !== Builders.WHEEL && builder.slug !== Builders.BOXES} selected={builder.slug === props.data.builder}>
             <img src={builder.circle} alt={builder.name} />
             <div>
               <h2>{builder.name}</h2>

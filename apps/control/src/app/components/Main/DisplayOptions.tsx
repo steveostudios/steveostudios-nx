@@ -1,11 +1,12 @@
 import styled from "@emotion/styled";
 import { onUpdateFile } from "@nx/firebase";
-import { Background, Builders, Instructions, backgrounds, pickmeThemes, Title } from "@nx/shared-assets";
+import { Background, Builders, Instructions, backgrounds, pickmeThemes, Title, PickmeTheme, WheelTheme, AnyTheme, WheelPosition } from "@nx/shared-assets";
 import { Colors } from "@nx/style";
 import { Label } from "@nx/ui";
 import { useModals } from "../../providers/ModalProvider";
 import BackgroundModal from "../modals/BackgroundModal";
 import InstructionsModal from "../modals/InstructionsModal";
+import PositionModal from "../modals/PositionModal";
 import ThemeModal from "../modals/ThemeModal";
 
 interface Props {
@@ -13,12 +14,16 @@ interface Props {
   name: string;
   builder: Builders;
   theme: number;
+  themes: AnyTheme[];
   background: number;
   instructionsContent: string;
+  position?: number;
+  positions?: WheelPosition[];
 }
 
 const DisplayOptions: React.FC<Props> = (props) => {
-  const themeImage = pickmeThemes.find(item => item.id === props.theme);
+  const themeImage = props.themes.find(item => item.id === props.theme);
+  const positionImage = props?.positions?.find(item => item.id === props.position) || null;
 
   const { push } = useModals();
 
@@ -62,7 +67,7 @@ const DisplayOptions: React.FC<Props> = (props) => {
       component: ThemeModal,
       initialData: {
         currentTheme: props.theme,
-        themes: pickmeThemes,
+        themes: props.themes,
       },
       title: "Pick a Theme",
       onLiveUpdate: onThemeLiveUpdate,
@@ -72,6 +77,23 @@ const DisplayOptions: React.FC<Props> = (props) => {
   const onThemeLiveUpdate = (data: any) => {
     if (!data.theme) return;
       onUpdateFile(props.selectedFileId, {'theme': data.theme})      
+  };
+
+  const onPosition = () => {
+    push({
+      component: PositionModal,
+      initialData: {
+        currentPosition: props.position,
+        positions: props.positions,
+      },
+      title: "Pick a Position",
+      onLiveUpdate: onPositionLiveUpdate,
+    });
+  };
+
+  const onPositionLiveUpdate = (data: any) => {
+    if (!data.position) return;
+      onUpdateFile(props.selectedFileId, {'position': data.position})      
   };
 
   return (
@@ -100,6 +122,12 @@ const DisplayOptions: React.FC<Props> = (props) => {
           <img src={themeImage?.thumb} alt="theme" />
           </ImageContainer>
       </Option>
+      {!!props.position && <Option>
+        <Label slug="position" label="Position" />
+        <ImageContainer onClick={onPosition}>
+          <img src={positionImage?.thumb || ""} alt="position" />
+          </ImageContainer>
+      </Option>}
     </Container>
   );
 };

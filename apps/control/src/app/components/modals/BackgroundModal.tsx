@@ -114,6 +114,7 @@ const Thumb = styled("div")({
   overflow: "hidden",
   backgroundColor: Colors.gray8,
   width: "12rem",
+  height: "6.75rem",
   boxSizing: "border-box",
   borderStyle: "solid",
   borderWidth: 2,

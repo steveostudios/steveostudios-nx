@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { onUpdateFile } from "@nx/firebase"
 import { Colors } from "@nx/style";
-import { File, Item, PickmeFile, PickmeItem, pickmeThemes, pickmeWeights } from "@nx/shared-assets";
+import { Item, BoxesFile, boxesWeights, boxesThemes, BoxesItem } from "@nx/shared-assets";
 import {Button, List, ButtonStyle, Select, LockedInput} from "@nx/ui"
 import DisplayOptions from "./../../Main/DisplayOptions"
 import { useModals } from "./../../../providers/ModalProvider"
@@ -10,10 +10,10 @@ import RemoveAllModal from "./../../modals/RemoveAllModal";
 import AddBulkModal, { AddBulkModalData } from "../../modals/AddBulkModal";
 
 interface Props {
-  file: PickmeFile;
+  file: BoxesFile;
 }
 
-const PickmeEdit: React.FC<Props> = (props) => {
+const BoxesEdit: React.FC<Props> = (props) => {
   const { file } = props;
   const { push } = useModals();
   const selectedFileId = props.file.id;
@@ -38,7 +38,9 @@ const PickmeEdit: React.FC<Props> = (props) => {
           name,
           order: order + i,
           visible: true,
-          weight: 2
+          weight: 2,
+          color: 3,
+          emoji: "test"
         }
       }).reduce((obj, item) => {
         const {id, ...properties} = item;
@@ -61,12 +63,14 @@ const PickmeEdit: React.FC<Props> = (props) => {
 
   const onAddItem = () => {
     const id = uuidv4();
-    const order = !Object.keys(file.items).length ? 1 : Object.entries(file.items).sort((prev: [string, Item], next: [string, Item]) => next[1].order - prev[1].order)[0][1].order + 1;
-    const item: Omit<PickmeItem, "id"> = {
+    const order = !Object.keys(file.items).length ? 1 : Object.entries(file.items).sort((prev: [string, BoxesItem], next: [string, Item]) => next[1].order - prev[1].order)[0][1].order + 1;
+    const item: Omit<BoxesItem, "id"> = {
       name: "test",
       order: order,
       visible: true,
-      weight: 2
+      weight: 2,
+      color: 2,
+      emoji: "test"
     }
     onUpdateFile(selectedFileId, {[`items.${id}`]: item})
   }
@@ -86,7 +90,7 @@ const PickmeEdit: React.FC<Props> = (props) => {
   const onRemoveItem = (value: string) => {
     const items = Object.fromEntries(Object.entries(file.items)
       .filter(([id, item]) => id !== value)
-      .sort((a: [string, PickmeItem], b: [string, PickmeItem]) => a[1].order < b[1].order ? -1 : a[1].order > b[1].order ? 1 : 0)
+      .sort((a: [string, Item], b: [string, Item]) => a[1].order < b[1].order ? -1 : a[1].order > b[1].order ? 1 : 0)
       .map(([id, item], i) => [id, {...item, order: i + 1 }])
     )
     onUpdateFile(selectedFileId, {"items": items})
@@ -108,7 +112,7 @@ const PickmeEdit: React.FC<Props> = (props) => {
   return (
     <>
       <Section>
-        <DisplayOptions selectedFileId={selectedFileId} name={file.name} builder={file.builder} theme={file.theme} background={file.background} instructionsContent={file.instructionsContent} themes={pickmeThemes}/>
+        <DisplayOptions selectedFileId={selectedFileId} name={file.name} builder={file.builder} theme={file.theme} background={file.background} instructionsContent={file.instructionsContent} themes={boxesThemes} />
       </Section>
       <SectionNoBorder>
         <div>
@@ -127,7 +131,7 @@ const PickmeEdit: React.FC<Props> = (props) => {
           : <List>
             {Object.entries(file?.items).sort((a: [string, Item], b: [string, Item]) => a[1].order < b[1].order ? -1 : a[1].order > b[1].order ? 1 : 0).map(([id, item], i) => {
             item = {...item, id: id};
-            return <Row key={id} {...item} onChangeVisible={onChangeVisible} onChangeName={onChangeName} onChangeWeight={onChangeWeight} onRemove={onRemoveItem} />
+            return <Row key={id} {...item} onChangeVisible={onChangeVisible} onChangeName={onChangeName} onChangeWeight={onChangeWeight} onRemove={onRemoveItem}  />
           })}
         </List>}
       </SectionFullHeight>
@@ -135,7 +139,7 @@ const PickmeEdit: React.FC<Props> = (props) => {
   );
 };
 
-export default PickmeEdit;
+export default BoxesEdit;
 
 const Section = styled("div")({
   display: "flex",
@@ -174,7 +178,7 @@ const AddMoreContent = styled("div")({
   color: Colors.gray4
 })
 
-interface RowProps extends PickmeItem {
+interface RowProps extends BoxesItem {
   onChangeVisible: (id: string, value: boolean) => void;
   onChangeName: (id: string, value: string) => void;
   onChangeWeight: (id: string, value: string | number) => void;
@@ -182,7 +186,6 @@ interface RowProps extends PickmeItem {
 }
 
 const Row: React.FC<RowProps> = (props) => {
-
   return (
     <RowContainer key={props.id} visible={props.visible}>
       <Button slug="handle" name={String(props.order)} skin={ButtonStyle.CLEAR} onClick={() => {return}} disabled/>
@@ -190,7 +193,7 @@ const Row: React.FC<RowProps> = (props) => {
         ?  <Button slug="visible" icon="eye" skin={ButtonStyle.CLEAR} onClick={() => props.onChangeVisible(props.id, false)}/>
         : <Button slug="hide" icon="eye-slash" skin={ButtonStyle.CLEAR} onClick={() => props.onChangeVisible(props.id, true)}/>}
       <LockedInput slug="name" value={props.name} onChange={(value) => props.onChangeName(props.id, value)} />
-      <Select slug="weight" value={props.weight} onChange={(value) => props.onChangeWeight(props.id, value)} options={pickmeWeights} />
+      <Select slug="weight" value={props.weight} onChange={(value) => props.onChangeWeight(props.id, value)} options={boxesWeights} />
       <Button slug="delete" icon="trash" skin={ButtonStyle.CLEAR} onClick={() => props.onRemove(props.id)}/>
     </RowContainer>
   )
