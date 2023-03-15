@@ -18,6 +18,35 @@ const WheelEdit: React.FC<Props> = (props) => {
   const { push } = useModals();
   const selectedFileId = props.file.id;
 
+  const recalcItems = () => {
+    const visibleItems =  Object.entries(file.items).filter(([id, item]) => item.visible).sort((prev: [string, WheelItem], next: [string, WheelItem]) => next[1].order - prev[1].order)
+    const totalSegments = visibleItems.map(([id, item]) => {
+      return [...Array(item.size)].map(() => id)
+    }).flat(1).length
+
+    const segment:number = 360/totalSegments;
+    let segmentCounter = 0;
+
+    const updatedItems = visibleItems.map(([id, item]) => {
+
+      const newItem =  [id, {
+        ...item, 
+        startAngle: segmentCounter,
+        textAngle: 5,
+        percent: 100
+      }]
+      segmentCounter = item.size * segment;
+
+      return newItem
+    })
+
+    return updatedItems
+
+
+
+
+  }
+
   const onAddBulkModal = () => {
     push({
       component: AddBulkModal,
@@ -40,7 +69,10 @@ const WheelEdit: React.FC<Props> = (props) => {
           visible: true,
           weight: 2,
           size: 1,
-          color: 1
+          color: 1,
+          startAngle: 0,
+          textAngle: 22.5,
+          percent: 45
         }
       }).reduce((obj, item) => {
         const {id, ...properties} = item;
@@ -70,12 +102,16 @@ const WheelEdit: React.FC<Props> = (props) => {
       visible: true,
       weight: 2,
       size: 1,
-      color: 1
+      color: 1,
+      startAngle: 0,
+      textAngle: 22.5,
+      percent: 45
     }
     onUpdateFile(selectedFileId, {[`items.${id}`]: item})
   }
 
   const onChangeVisible = (id: string, value: boolean) => {
+    console.log(recalcItems());
     onUpdateFile(selectedFileId, {[`items.${id}.visible`]: value})
   }
 
