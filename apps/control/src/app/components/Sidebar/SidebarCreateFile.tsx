@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { onCreateFile } from "@nx/firebase";
-import { pickmeDefaultFile } from "@nx/shared-assets";
+import { AnyFile, pickmeDefaultFile, wheelDefaultFile } from "@nx/shared-assets";
 import { Colors } from "@nx/style";
 import { Button, ButtonStyle } from "@nx/ui";
 import { useModals } from "../../providers/ModalProvider";
@@ -8,6 +8,10 @@ import CreateFileModal, { CreateFileModalData } from "../modals/CreateFileModal"
 
 interface Props {
   userId: string;
+}
+
+interface IDefaultFile {
+  [key: string]: Omit<AnyFile, "id">
 }
 
 const SidebarCreateFile: React.FC<Props> = (props) => {
@@ -23,9 +27,11 @@ const SidebarCreateFile: React.FC<Props> = (props) => {
   }
 
   const onCreateFileModalConfirm = (data: CreateFileModalData) => {
-    const name = data.name;
-    const file = {...pickmeDefaultFile, name};
-    onCreateFile(props.userId, file)
+    const defaultFiles: IDefaultFile  = {
+      pickme: pickmeDefaultFile,
+      wheel: wheelDefaultFile
+    }
+    onCreateFile(props.userId, {...defaultFiles[data.builder], name: data.name})
   }
 
   return (

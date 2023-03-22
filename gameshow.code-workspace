@@ -8,5 +8,7 @@
 			"uri": "fildir:/"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"editor.formatOnSave": true
+	}
 }
