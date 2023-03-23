@@ -10,7 +10,14 @@ import {
 	wheelThemes,
 	wheelPositions,
 } from "@nx/shared-assets";
-import { Button, List, ButtonStyle, Select, LockedInput, Option } from "@nx/ui";
+import {
+	Button,
+	List,
+	ButtonStyle,
+	LockedInput,
+	Option,
+	RowDropdown,
+} from "@nx/ui";
 import DisplayOptions from "./../../Main/DisplayOptions";
 import { useModals } from "./../../../providers/ModalProvider";
 import { uuidv4 } from "@firebase/util"; // TODO: THis is probably not right
@@ -285,7 +292,7 @@ const WheelEdit: React.FC<Props> = (props) => {
 										onChangeSize={onChangeSize}
 										onChangeColor={onChangeColor}
 										onRemove={onRemoveItem}
-										colors={wheelThemes[file.theme].colors}
+										colors={wheelThemes[file.theme - 1].colors} // correct but needs to be .find()
 									/>
 								);
 							})}
@@ -346,8 +353,10 @@ interface RowProps extends WheelItem {
 }
 
 const Row: React.FC<RowProps> = (props) => {
+	console.log(props.colors);
 	const colorOptions: Option[] = props.colors.map((item, i) => ({
-		name: item,
+		name: "",
+		color: "#" + item,
 		value: i,
 	}));
 
@@ -382,23 +391,29 @@ const Row: React.FC<RowProps> = (props) => {
 				value={props.name}
 				onChange={(value) => props.onChangeName(props.id, value)}
 			/>
-			<Select
+			<RowDropdown
 				slug="weight"
 				value={props.weight}
 				onChange={(value) => props.onChangeWeight(props.id, value)}
 				options={wheelWeights}
+				title="Odds"
+				description="How likely this item will get picked"
 			/>
-			<Select
+			<RowDropdown
 				slug="size"
 				value={props.size}
 				onChange={(value) => props.onChangeSize(props.id, value)}
 				options={wheelSizes}
+				title="Size"
+				description="Physical size of the item"
 			/>
-			<Select
+			<RowDropdown
 				slug="color"
 				value={props.color}
 				onChange={(value) => props.onChangeColor(props.id, value)}
 				options={colorOptions}
+				title="Color"
+				description="Color of the item"
 			/>
 			<Button
 				slug="delete"
