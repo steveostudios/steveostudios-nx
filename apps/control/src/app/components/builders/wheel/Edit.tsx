@@ -353,7 +353,6 @@ interface RowProps extends WheelItem {
 }
 
 const Row: React.FC<RowProps> = (props) => {
-	console.log(props.colors);
 	const colorOptions: Option[] = props.colors.map((item, i) => ({
 		name: "",
 		color: "#" + item,
