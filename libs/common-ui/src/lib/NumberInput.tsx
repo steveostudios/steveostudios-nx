@@ -7,18 +7,17 @@ interface Props {
 	slug: string;
 	label?: string;
 	inline?: boolean;
-	onChange: (value: string) => void;
+	onChange: (value: number) => void;
 	disabled?: boolean;
-	value: string;
-	type?: "text" | "phone" | "password" | "email";
+	value: string | number;
 	locked?: boolean;
 	placeholder?: string;
 }
 
-export const TextInput: React.FC<Props> = (props) => {
+export const NumberInput: React.FC<Props> = (props) => {
 	const onChange = (e: FormEvent<HTMLInputElement>) => {
 		if (props.disabled) return false;
-		props.onChange(e.currentTarget.value);
+		props.onChange(parseInt(e.currentTarget.value));
 		return;
 	};
 
@@ -27,7 +26,7 @@ export const TextInput: React.FC<Props> = (props) => {
 			<Label slug={props.slug} label={props.label} />
 			<Input
 				placeholder={props.placeholder}
-				type={props.type ? props.type : "text"}
+				type="number"
 				value={props.value}
 				onChange={onChange}
 				disabled={props.disabled}

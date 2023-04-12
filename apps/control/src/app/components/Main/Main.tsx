@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
-import { Modes } from "@nx/shared-assets";
+import { Logo, Modes, Score, Timer, Widgets } from "@nx/shared-assets";
 import { ReactNode } from "react";
+import WidgetSidebar from "../widgets/Sidebar";
 import MainHeader from "./MainHeader";
 
 interface Props {
@@ -10,7 +11,11 @@ interface Props {
 	sounds?: boolean;
 	instructions?: boolean;
 	userId: string;
+	selectedWidget: Widgets;
 	selectedMode: Modes;
+	score: Score;
+	timer: Timer;
+	logo: Logo;
 }
 
 const Main: React.FC<Props> = (props) => {
@@ -24,7 +29,16 @@ const Main: React.FC<Props> = (props) => {
 				sounds={props.sounds}
 				instructions={props.instructions}
 			/>
-			<Wrapper>{props.children}</Wrapper>
+			<MainContainer>
+				<Wrapper>{props.children}</Wrapper>
+				<WidgetSidebar
+					userId={props.userId}
+					score={props.score}
+					timer={props.timer}
+					logo={props.logo}
+					selectedWidget={props.selectedWidget}
+				/>
+			</MainContainer>
 		</Container>
 	);
 };
@@ -37,7 +51,12 @@ const Container = styled("main")({
 	flex: 1,
 	height: "100vh",
 });
-
+const MainContainer = styled("div")({
+	display: "flex",
+	flex: 1,
+	height: "100vh",
+	flexDirection: "row",
+});
 const Wrapper = styled("div")({
 	flex: 1,
 	maxHeight: "calc(100vh - 8rem)",

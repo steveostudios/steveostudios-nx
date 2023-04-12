@@ -100,6 +100,7 @@ export const onCreateFile = async (
 	});
 };
 
+// Delete a file
 export const onDeleteFile = async (userId: string, fileId: string) => {
 	const userRef = doc(db, "users", userId);
 	const fileRef = doc(db, "files", fileId);
@@ -107,6 +108,7 @@ export const onDeleteFile = async (userId: string, fileId: string) => {
 	await updateDoc(userRef, { [`files.${fileId}`]: deleteField() });
 };
 
+// Rename a file
 export const onRenameFile = async (
 	userId: string,
 	fileId: string,
@@ -182,6 +184,10 @@ export const onGetUserSettings = async (
 			instructions: data?.instructions,
 			selectedMode: data?.selectedMode,
 			selectedFileId: data?.selectedFileId,
+			selectedWidget: data?.selectedWidget,
+			score: data?.score,
+			timer: data?.timer,
+			logo: data?.logo,
 		});
 	});
 };

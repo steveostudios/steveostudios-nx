@@ -9,6 +9,8 @@ import {
 	WheelFile,
 	PickmeFile,
 	BoxesFile,
+	Widgets,
+	defaultUserSettings,
 } from "@nx/shared-assets";
 import { useEffect, useState } from "react";
 import Main from "../components/Main/Main";
@@ -25,13 +27,8 @@ const Manage = () => {
 	const [file, setFile] = useState<AnyFile | null>(); // MtEyqt2j6NLs5nO8vIOA
 	// const userId = "iBfXqM9uuEWBMv8bEARIaQgwJFI3";
 	const { user } = useFirebaseAuth();
-	const [userSettings, setUserSettings] = useState<UserSettings>({
-		titleGraphic: false,
-		sounds: true,
-		instructions: false,
-		selectedMode: Modes.EDIT,
-		selectedFileId: null,
-	});
+	const [userSettings, setUserSettings] =
+		useState<UserSettings>(defaultUserSettings);
 
 	useEffect(() => {
 		if (user && user.uid)
@@ -94,6 +91,10 @@ const Manage = () => {
 					sounds={userSettings?.sounds}
 					instructions={userSettings?.instructions}
 					selectedMode={userSettings?.selectedMode || Modes.EDIT}
+					score={userSettings?.score}
+					timer={userSettings?.timer}
+					logo={userSettings?.logo}
+					selectedWidget={userSettings?.selectedWidget}
 				>
 					{getMain()}
 				</Main>
