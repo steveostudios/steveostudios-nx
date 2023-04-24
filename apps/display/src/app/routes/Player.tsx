@@ -22,6 +22,7 @@ import { Pickme } from "../builders/Pickme";
 import { Wheel } from "../builders/Wheel";
 import { Boxes } from "../builders/Boxes";
 import { Score } from "../widgets/Score";
+import { Timer } from "../widgets/Timer";
 
 export const Player: React.FC = () => {
 	const [file, setFile] = useState<AnyFile | null>();
@@ -57,6 +58,7 @@ export const Player: React.FC = () => {
 						<Boxes file={file as BoxesFile} />
 					)}
 					<Score active={userSettings.score.show} score={userSettings.score} />
+					<Timer active={userSettings.timer.show} timer={userSettings.timer} />
 					<Instructions
 						active={!!userSettings?.instructions}
 						value={file.instructionsContent}

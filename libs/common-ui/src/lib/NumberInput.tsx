@@ -12,6 +12,9 @@ interface Props {
 	value: string | number;
 	locked?: boolean;
 	placeholder?: string;
+	min?: number;
+	max?: number;
+	width?: string;
 }
 
 export const NumberInput: React.FC<Props> = (props) => {
@@ -30,6 +33,9 @@ export const NumberInput: React.FC<Props> = (props) => {
 				value={props.value}
 				onChange={onChange}
 				disabled={props.disabled}
+				min={props.min}
+				max={props.max}
+				width={props.width}
 			/>
 		</Container>
 	);
@@ -37,6 +43,7 @@ export const NumberInput: React.FC<Props> = (props) => {
 
 const Container = styled("div")(
 	{
+		display: "flex",
 		flex: 1,
 		height: "4rem",
 		"& > *": {

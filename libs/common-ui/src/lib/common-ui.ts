@@ -1,4 +1,5 @@
 export * from "./Button";
+export * from "./ButtonGroup";
 export * from "./ContextMenu";
 export * from "./Label";
 export * from "./List";
@@ -10,3 +11,6 @@ export * from "./TextInput";
 export * from "./Toggle";
 export * from "./RowDropdown";
 export * from "./NumberInput";
+export * from "./ColorPicker";
+export * from "./Section";
+export * from "./Popover";

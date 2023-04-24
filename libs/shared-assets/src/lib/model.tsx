@@ -1,6 +1,14 @@
 import { BoxesFile, BoxesItem, BoxesTheme } from "./boxes";
 import { PickmeFile, PickmeItem, PickmeTheme } from "./pickme";
-import { Logo, Score, Timer, Widgets } from "./widgets";
+import {
+	defaultLogoSettings,
+	defaultScoreSettings,
+	defaultTimerSettings,
+	Logo,
+	Score,
+	Timer,
+	Widgets,
+} from "./widgets";
 import { WheelFile, WheelItem, WheelTheme } from "./wheel";
 
 // Types
@@ -72,18 +80,9 @@ export const defaultUserSettings: UserSettings = {
 	selectedMode: Modes.EDIT,
 	selectedFileId: null,
 	selectedWidget: Widgets.LOGO,
-	score: {
-		pointAmount: 1,
-		show: false,
-		teams: {},
-	},
-	timer: {
-		show: false,
-		time: "",
-	},
-	logo: {
-		show: false,
-	},
+	score: defaultScoreSettings,
+	timer: defaultTimerSettings,
+	logo: defaultLogoSettings,
 };
 
 console.log(defaultUserSettings);

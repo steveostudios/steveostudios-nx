@@ -8,7 +8,14 @@ import {
 	pickmeThemes,
 	pickmeWeights,
 } from "@nx/shared-assets";
-import { Button, List, ButtonStyle, LockedInput, RowDropdown } from "@nx/ui";
+import {
+	Button,
+	List,
+	ButtonStyle,
+	LockedInput,
+	RowDropdown,
+	Section,
+} from "@nx/ui";
 import DisplayOptions from "./../../Main/DisplayOptions";
 import { useModals } from "./../../../providers/ModalProvider";
 import { uuidv4 } from "@firebase/util"; // TODO: THis is probably not right
@@ -163,7 +170,7 @@ const PickmeEdit: React.FC<Props> = (props) => {
 
 	return (
 		<>
-			<Section>
+			<Section border paddingBottom>
 				<DisplayOptions
 					selectedFileId={selectedFileId}
 					name={file.name}
@@ -174,7 +181,7 @@ const PickmeEdit: React.FC<Props> = (props) => {
 					themes={pickmeThemes}
 				/>
 			</Section>
-			<SectionNoBorder>
+			<Section>
 				<div>
 					<Button icon="plus" slug="additem" onClick={onAddItem} />
 					<Button
@@ -209,8 +216,8 @@ const PickmeEdit: React.FC<Props> = (props) => {
 						disabled={!Object.entries(file.items).length}
 					/>
 				</div>
-			</SectionNoBorder>
-			<SectionFullHeight>
+			</Section>
+			<Section fullHeight paddingBottom>
 				{!Object.entries(file?.items).length ? (
 					<AddMoreContent>Add more items to play</AddMoreContent>
 				) : (
@@ -234,43 +241,12 @@ const PickmeEdit: React.FC<Props> = (props) => {
 							})}
 					</List>
 				)}
-			</SectionFullHeight>
+			</Section>
 		</>
 	);
 };
 
 export default PickmeEdit;
-
-const Section = styled("div")({
-	display: "flex",
-	gap: "1rem",
-	padding: "2rem",
-	borderBottomColor: Colors.gray9,
-	borderBottomWidth: 1,
-	borderBottomStyle: "solid",
-});
-const SectionFullHeight = styled("div")({
-	display: "flex",
-	gap: "1rem",
-	padding: "2rem",
-	borderBottomColor: Colors.gray9,
-	borderBottomWidth: 1,
-	borderBottomStyle: "solid",
-	overflow: "hidden",
-	flex: 1,
-});
-
-const SectionNoBorder = styled("div")({
-	display: "flex",
-	gap: "1rem",
-	padding: "2rem 2rem 0 2rem",
-	alignItems: "center",
-	justifyContent: "space-between",
-	"> * ": {
-		display: "flex",
-		gap: "1rem",
-	},
-});
 
 const AddMoreContent = styled("div")({
 	alignSelf: "center",

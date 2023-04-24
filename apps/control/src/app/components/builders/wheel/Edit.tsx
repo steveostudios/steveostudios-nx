@@ -17,6 +17,7 @@ import {
 	LockedInput,
 	Option,
 	RowDropdown,
+	Section,
 } from "@nx/ui";
 import DisplayOptions from "./../../Main/DisplayOptions";
 import { useModals } from "./../../../providers/ModalProvider";
@@ -222,7 +223,7 @@ const WheelEdit: React.FC<Props> = (props) => {
 
 	return (
 		<>
-			<Section>
+			<Section border paddingBottom>
 				<DisplayOptions
 					selectedFileId={selectedFileId}
 					name={file.name}
@@ -235,7 +236,7 @@ const WheelEdit: React.FC<Props> = (props) => {
 					positions={wheelPositions}
 				/>
 			</Section>
-			<SectionNoBorder>
+			<Section>
 				<div>
 					<Button icon="plus" slug="additem" onClick={onAddItem} />
 					<Button
@@ -270,8 +271,8 @@ const WheelEdit: React.FC<Props> = (props) => {
 						disabled={!Object.entries(file.items).length}
 					/>
 				</div>
-			</SectionNoBorder>
-			<SectionFullHeight>
+			</Section>
+			<Section fullHeight paddingBottom>
 				{!Object.entries(file?.items).length ? (
 					<AddMoreContent>Add more items to play</AddMoreContent>
 				) : (
@@ -298,43 +299,12 @@ const WheelEdit: React.FC<Props> = (props) => {
 							})}
 					</List>
 				)}
-			</SectionFullHeight>
+			</Section>
 		</>
 	);
 };
 
 export default WheelEdit;
-
-const Section = styled("div")({
-	display: "flex",
-	gap: "1rem",
-	padding: "2rem",
-	borderBottomColor: Colors.gray9,
-	borderBottomWidth: 1,
-	borderBottomStyle: "solid",
-});
-const SectionFullHeight = styled("div")({
-	display: "flex",
-	gap: "1rem",
-	padding: "2rem",
-	borderBottomColor: Colors.gray9,
-	borderBottomWidth: 1,
-	borderBottomStyle: "solid",
-	overflow: "hidden",
-	flex: 1,
-});
-
-const SectionNoBorder = styled("div")({
-	display: "flex",
-	gap: "1rem",
-	padding: "2rem 2rem 0 2rem",
-	alignItems: "center",
-	justifyContent: "space-between",
-	"> * ": {
-		display: "flex",
-		gap: "1rem",
-	},
-});
 
 const AddMoreContent = styled("div")({
 	alignSelf: "center",

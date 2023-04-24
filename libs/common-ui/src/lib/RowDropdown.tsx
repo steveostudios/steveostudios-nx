@@ -1,10 +1,11 @@
-import React, { MouseEvent, useEffect, useRef, useState } from "react";
-import { Colors, Shadows } from "@nx/style";
+import React, { MouseEvent, useState } from "react";
+import { Colors } from "@nx/style";
 import styled from "@emotion/styled";
 import { Label } from "./Label";
 import { List } from "./List";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Popover } from "./Popover";
 
 export interface RowDropdownOption {
 	name: string;
@@ -26,22 +27,7 @@ interface Props {
 }
 
 export const RowDropdown: React.FC<Props> = (props) => {
-	const ref = useRef<HTMLDivElement>(null);
 	const [active, setActive] = useState(false);
-
-	useEffect(() => {
-		function handleClickOutside(event: Event): void {
-			if (ref.current && !ref.current.contains(event.target as Node)) {
-				setActive(false);
-			}
-		}
-		// Bind the event listener
-		document.addEventListener("mousedown", handleClickOutside);
-		return () => {
-			// Unbind the event listener on clean up
-			document.removeEventListener("mousedown", handleClickOutside);
-		};
-	});
 
 	const onToggle = () => {
 		if (props.disabled) return false;
@@ -59,73 +45,55 @@ export const RowDropdown: React.FC<Props> = (props) => {
 	return (
 		<Container>
 			<Label slug={props.slug} label={props.label} />
-			<SelectButton active={active}>
-				<Item
-					value={props.value}
-					options={props.options}
-					onClick={onToggle}
-					selector
-				/>
-			</SelectButton>
-			<SelectElement active={active} ref={ref}>
-				<Header>
-					<h1>{props.title}</h1>
-					<p>{props.description}</p>
-				</Header>
-				<List>
-					{props.options.map((option) => (
-						<Option key={option.value} value={option.value}>
-							<Item
-								options={props.options}
-								value={option.value}
-								onClick={onChange}
-								selected={option.value === props.value}
-							/>
-						</Option>
-					))}
-				</List>
-			</SelectElement>
+			<Popover
+				active={active}
+				setActive={(value) => setActive(value)}
+				target={
+					<SelectButton active={active}>
+						<Item
+							value={props.value}
+							options={props.options}
+							onClick={onToggle}
+							selector
+						/>
+					</SelectButton>
+				}
+				popover={
+					<SelectElement>
+						<Header>
+							<h1>{props.title}</h1>
+							<p>{props.description}</p>
+						</Header>
+						<List>
+							{props.options.map((option) => (
+								<Option key={option.value} value={option.value}>
+									<Item
+										options={props.options}
+										value={option.value}
+										onClick={onChange}
+										selected={option.value === props.value}
+									/>
+								</Option>
+							))}
+						</List>
+					</SelectElement>
+				}
+			/>
 		</Container>
 	);
 };
 
-const Container = styled("div")({
-	position: "relative",
-});
+const Container = styled("div")({});
 
-const SelectElement = styled("div")((props: { active: boolean }) => ({
-	position: "absolute",
-	right: `calc(100% + 0.5rem)`,
-	top: "-1rem",
+const SelectElement = styled("div")({
 	flexDirection: "column",
-	boxShadow: Shadows.standard,
-	borderWidth: 1,
-	borderStyle: "solid",
-	borderColor: Colors.gray7,
-	backgroundColor: Colors.gray9,
-	borderRadius: "0.5rem",
 	padding: 0,
 	color: Colors.white,
 	maxHeight: "22rem",
 	minWidth: "12rem",
 	width: "max-content",
 	display: "flex",
-	zIndex: props.active ? 1 : -1,
-	opacity: props.active ? 1 : 0,
-	":after": {
-		content: '""',
-		display: "block",
-		position: "absolute",
-		top: "2rem",
-		left: "100%",
-		width: 0,
-		height: 0,
-		borderStyle: "solid",
-		borderWidth: "1rem 0 1rem 1rem",
-		borderColor: `transparent transparent transparent ${Colors.gray7}`,
-		filter: `drop-shadow(1px 0 0 ${Colors.gray7}) drop-shadow(0 .5px 0 ${Colors.gray7})`,
-	},
-}));
+});
 
 const Header = styled("div")({
 	display: "flex",
@@ -206,6 +174,7 @@ const Swatch = styled("div")((props: { color: string }) => ({
 	width: "100%",
 	height: "3rem",
 	backgroundColor: props.color,
+	borderRadius: "0.5rem",
 	borderWidth: 1,
 	borderStyle: "solid",
 	borderColor: Colors.gray9,

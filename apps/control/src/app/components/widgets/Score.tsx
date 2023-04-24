@@ -1,15 +1,15 @@
 import styled from "@emotion/styled";
 import { uuidv4 } from "@firebase/util";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { onUpdateUserSettings } from "@nx/firebase";
 import { Score as IScore, Team } from "@nx/shared-assets";
 import {
 	Button,
 	ButtonStyle,
+	ColorPicker,
 	List,
 	LockedInput,
 	NumberInput,
-	Toggle,
+	Section,
 } from "@nx/ui";
 import WidgetHeader from "./WidgetHeader";
 
@@ -19,10 +19,6 @@ interface Props {
 }
 
 const Score: React.FC<Props> = (props) => {
-	const doSomething = () => {
-		return;
-	};
-
 	const onChangeShow = (value: boolean) => {
 		onUpdateUserSettings(props.userId, {
 			score: { ...props.score, show: value },
@@ -74,6 +70,19 @@ const Score: React.FC<Props> = (props) => {
 		});
 	};
 
+	const onChangeColor = (id: string, value: string) => {
+		const item = (props.score.teams[id] = {
+			...props.score.teams[id],
+			color: value,
+		});
+		onUpdateUserSettings(props.userId, {
+			score: {
+				...props.score,
+				teams: recalcItems({ ...props.score.teams, [id]: item }),
+			},
+		});
+	};
+
 	const recalcItems = (items: { [id: string]: Omit<Team, "id"> }) => {
 		const updatedItems = Object.entries(items)
 			.sort(
@@ -113,6 +122,7 @@ const Score: React.FC<Props> = (props) => {
 				order: order,
 				visible: item.visible || true,
 				points: item.points || 0,
+				color: "#00ff00",
 			};
 			return [id, newItem];
 		});
@@ -143,61 +153,58 @@ const Score: React.FC<Props> = (props) => {
 	};
 
 	return (
-		<Container>
+		<>
 			<WidgetHeader
 				icon="tally"
 				title="Score"
 				show={props.score.show}
 				onChangeShow={onChangeShow}
 			/>
-			<TopOptions>
+			<Section>
 				<Button slug="addTeam" name="Team" icon="plus" onClick={onAddItem} />
 				<NumberInput
 					slug="pointAmount"
+					label="Point Amount"
+					inline
 					value={props.score.pointAmount}
 					onChange={onChangePointAmount}
 				/>
-			</TopOptions>
-			<List>
-				{props.score.teams &&
-					Object.entries(props.score.teams)
-						.sort((a: [string, Team], b: [string, Team]) =>
-							a[1].order < b[1].order ? -1 : a[1].order > b[1].order ? 1 : 0
-						)
-						.map(([id, item], i) => {
-							item = { ...item, id: id };
-							return (
-								<Row
-									key={id}
-									{...item}
-									pointAmount={props.score.pointAmount}
-									onChangePoints={onChangePoints}
-									onChangeVisible={onChangeVisible}
-									onChangeName={onChangeName}
-									onRemove={onRemoveItem}
-								/>
-							);
-						})}
-			</List>
-		</Container>
+			</Section>
+			<Section fullHeight paddingBottom>
+				<List>
+					{props.score.teams &&
+						Object.entries(props.score.teams)
+							.sort((a: [string, Team], b: [string, Team]) =>
+								a[1].order < b[1].order ? -1 : a[1].order > b[1].order ? 1 : 0
+							)
+							.map(([id, item], i) => {
+								item = { ...item, id: id };
+								return (
+									<Row
+										key={id}
+										{...item}
+										pointAmount={props.score.pointAmount}
+										onChangePoints={onChangePoints}
+										onChangeVisible={onChangeVisible}
+										onChangeColor={onChangeColor}
+										onChangeName={onChangeName}
+										onRemove={onRemoveItem}
+									/>
+								);
+							})}
+				</List>
+			</Section>
+		</>
 	);
 };
 
 export default Score;
 
-const Container = styled("div")({});
-
-const TopOptions = styled("div")({
-	display: "flex",
-	padding: "1rem",
-	alignItems: "center",
-	justifyContent: "space-between",
-});
-
 interface RowProps extends Team {
 	onChangeVisible: (id: string, value: boolean) => void;
 	onChangeName: (id: string, value: string) => void;
 	onChangePoints: (id: string, value: number) => void;
+	onChangeColor: (id: string, value: string) => void;
 	onRemove: (id: string) => void;
 	pointAmount: number;
 }
@@ -230,6 +237,11 @@ const Row: React.FC<RowProps> = (props) => {
 						onClick={() => props.onChangeVisible(props.id, true)}
 					/>
 				)}
+				<ColorPicker
+					slug="color"
+					value={props.color}
+					onChange={(value) => props.onChangeColor(props.id, value)}
+				/>
 				<LockedInput
 					slug="name"
 					value={props.name}
@@ -251,15 +263,15 @@ const Row: React.FC<RowProps> = (props) => {
 				<Button
 					slug="remove"
 					icon="minus"
-					skin={ButtonStyle.SECONDARY}
+					skin={ButtonStyle.PRIMARY}
 					onClick={() =>
 						props.onChangePoints(props.id, props.points - props.pointAmount)
 					}
 				/>
 				<Button
 					slug="add"
+					skin={ButtonStyle.SECONDARY}
 					icon="plus"
-					skin={ButtonStyle.PRIMARY}
 					onClick={() =>
 						props.onChangePoints(props.id, props.points + props.pointAmount)
 					}
@@ -277,7 +289,6 @@ const RowContainer = styled("li")(
 		"> div": {
 			display: "flex",
 			gap: "1rem",
-			padding: "1rem",
 		},
 	},
 	(props: { visible: boolean }) => {

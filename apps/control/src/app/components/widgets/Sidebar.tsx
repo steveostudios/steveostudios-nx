@@ -89,19 +89,23 @@ const WidgetSidebar: React.FC<Props> = (props) => {
 
 export default WidgetSidebar;
 
-const Container = styled("main")({
+const Container = styled("div")({
 	width: "40rem",
-	gap: "2rem",
 	display: "flex",
 	flexDirection: "column",
 	border: "none",
 	borderLeftStyle: "solid",
 	borderLeftWidth: 1,
 	borderLeftColor: Colors.gray9,
+	flex: "0 1",
+	maxHeight: "calc(100vh - 8rem)",
 });
 
 const Tabbar = styled("div")({
 	display: "flex",
+	padding: "2rem",
+	paddingTop: "1rem",
+	paddingBottom: 0,
 	width: "inherit",
 	height: "6rem",
 	alignItems: "center",
