@@ -1,4 +1,3 @@
-import styled from "@emotion/styled";
 import { Section, Toggle } from "@nx/ui";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,7 +11,7 @@ interface Props {
 
 const WidgetHeader: React.FC<Props> = (props) => {
 	return (
-		<Section>
+		<Section padding>
 			<div>
 				<FontAwesomeIcon icon={props.icon} />
 				{props.title}

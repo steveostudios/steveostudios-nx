@@ -77,7 +77,7 @@ const Timer: React.FC<Props> = (props) => {
 				show={props.timer.show}
 				onChangeShow={onChangeShow}
 			/>
-			<Section column>
+			<Section padding column>
 				<ButtonGroup slug="direction" label="Direction">
 					<Button
 						slug="up"
@@ -217,7 +217,7 @@ const Timer: React.FC<Props> = (props) => {
 					/>
 				</ButtonGroup>
 			</Section>
-			<Section>
+			<Section padding>
 				<Label slug="time" label="Time" />
 
 				<NumberInput
@@ -243,7 +243,7 @@ const Timer: React.FC<Props> = (props) => {
 					max={100}
 				/>
 			</Section>
-			<Section>
+			<Section padding>
 				{props.timer.isPlaying ? (
 					<Button
 						slug="pause"
@@ -264,7 +264,7 @@ const Timer: React.FC<Props> = (props) => {
 					disabled={!props.timer.elapsed}
 				/>
 			</Section>
-			<Section>
+			<Section padding>
 				<Toggle
 					label="Background"
 					slug="background"

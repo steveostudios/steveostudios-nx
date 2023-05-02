@@ -22,6 +22,7 @@ import { useFirebaseAuth } from "../context/AuthContext";
 import WheelEdit from "../components/builders/wheel/Edit";
 import WheelPlay from "../components/builders/wheel/Play";
 import BoxesEdit from "../components/builders/boxes/Edit";
+import BoxesPlay from "../components/builders/boxes/Play";
 
 const Manage = () => {
 	const [file, setFile] = useState<AnyFile | null>(); // MtEyqt2j6NLs5nO8vIOA
@@ -69,7 +70,7 @@ const Manage = () => {
 				if (userSettings.selectedMode === Modes.EDIT) {
 					return <BoxesEdit file={file as BoxesFile} />;
 				} else {
-					return <WheelPlay file={file as WheelFile} />;
+					return <BoxesPlay file={file as BoxesFile} />;
 				}
 			}
 		}

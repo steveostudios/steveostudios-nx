@@ -26,6 +26,7 @@ export const ColorPicker: React.FC<Props> = (props) => {
 				active={active}
 				setActive={(value) => setActive(value)}
 				target={<Swatch color={color} onClick={() => setActive(!active)} />}
+				maxHeight={22}
 				popover={
 					<Picker>
 						<ChromePicker

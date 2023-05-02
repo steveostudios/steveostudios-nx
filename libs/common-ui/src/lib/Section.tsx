@@ -16,12 +16,14 @@ export const Section = styled("div")(
 	(props: {
 		fullHeight?: boolean;
 		border?: boolean;
+		padding?: boolean;
 		paddingBottom?: boolean;
 		column?: boolean;
 	}) => ({
 		display: "flex",
 		gap: "1rem",
-		padding: props.paddingBottom ? "2rem" : "2rem 2rem 0 2rem",
+		padding: props.padding ? "2rem" : 0,
+		paddingBottom: props.paddingBottom ? "2rem" : 0,
 		borderBottomColor: Colors.gray9,
 		borderBottomWidth: props.border ? 1 : 0,
 		borderBottomStyle: "solid",
@@ -29,8 +31,9 @@ export const Section = styled("div")(
 		flex: props.fullHeight ? 1 : "none",
 		flexDirection: props.column ? "column" : "row",
 		alignItems: props.column ? "unset" : "center",
-		justifyContent: "space-between",
+		justifyContent: props.column ? "flex-start" : "space-between",
 		overflow: props.fullHeight ? "hidden" : "unset",
+		height: props.fullHeight && props.column ? "100%" : "unset",
 		"> * ": {
 			display: "flex",
 			gap: "1rem",

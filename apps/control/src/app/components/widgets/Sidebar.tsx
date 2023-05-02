@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { Colors } from "@nx/style";
-import { Button, ButtonStyle } from "@nx/ui";
+import { TabGroup } from "@nx/ui";
 import Score from "./Score";
 import {
 	Score as IScore,
@@ -26,51 +26,35 @@ const WidgetSidebar: React.FC<Props> = (props) => {
 		onUpdateUserSettings(props.userId, { selectedWidget: value });
 	};
 
-	const selectedStyle = {
-		borderBottom: `0.5rem solid ${Colors.blue}`,
-	};
-	const deselectedStyle = {
-		opacity: 0.5,
-		borderBottom: `0.5rem solid transparent`,
-	};
-
 	return (
 		<Container>
-			<Tabbar>
-				<Button
-					slug="score"
-					icon="tally"
-					skin={ButtonStyle.CLEAR}
-					onClick={() => onSelectWidget(Widgets.SCORE)}
-					style={
-						props.selectedWidget === Widgets.SCORE
-							? selectedStyle
-							: deselectedStyle
-					}
+			<div>
+				<TabGroup
+					tabs={[
+						{
+							slug: "score",
+							label: "Score",
+							icon: "tally",
+							onClick: () => onSelectWidget(Widgets.SCORE),
+							selected: props.selectedWidget === Widgets.SCORE,
+						},
+						{
+							slug: "timer",
+							label: "Timer",
+							icon: "stopwatch",
+							onClick: () => onSelectWidget(Widgets.TIMER),
+							selected: props.selectedWidget === Widgets.TIMER,
+						},
+						{
+							slug: "logo",
+							label: "Logo",
+							icon: "flag",
+							onClick: () => onSelectWidget(Widgets.LOGO),
+							selected: props.selectedWidget === Widgets.LOGO,
+						},
+					]}
 				/>
-				<Button
-					slug="timer"
-					icon="stopwatch"
-					skin={ButtonStyle.CLEAR}
-					onClick={() => onSelectWidget(Widgets.TIMER)}
-					style={
-						props.selectedWidget === Widgets.TIMER
-							? selectedStyle
-							: deselectedStyle
-					}
-				/>
-				<Button
-					slug="logo"
-					icon="flag"
-					skin={ButtonStyle.CLEAR}
-					onClick={() => onSelectWidget(Widgets.LOGO)}
-					style={
-						props.selectedWidget === Widgets.LOGO
-							? selectedStyle
-							: deselectedStyle
-					}
-				/>
-			</Tabbar>
+			</div>
 
 			{props.selectedWidget === Widgets.SCORE && (
 				<Score score={props.score} userId={props.userId} />
@@ -90,7 +74,8 @@ const WidgetSidebar: React.FC<Props> = (props) => {
 export default WidgetSidebar;
 
 const Container = styled("div")({
-	width: "40rem",
+	minWidth: "40rem",
+	maxWidth: "40rem",
 	display: "flex",
 	flexDirection: "column",
 	border: "none",
@@ -99,18 +84,4 @@ const Container = styled("div")({
 	borderLeftColor: Colors.gray9,
 	flex: "0 1",
 	maxHeight: "calc(100vh - 8rem)",
-});
-
-const Tabbar = styled("div")({
-	display: "flex",
-	padding: "2rem",
-	paddingTop: "1rem",
-	paddingBottom: 0,
-	width: "inherit",
-	height: "6rem",
-	alignItems: "center",
-	gap: "1rem",
-	borderBottomStyle: "solid",
-	borderBottomWidth: 1,
-	borderBottomColor: Colors.gray9,
 });

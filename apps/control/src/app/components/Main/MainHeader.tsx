@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { Colors } from "@nx/style";
-import { Button, ButtonStyle, Toggle } from "@nx/ui";
-import { onUpdateFileSettings, onUpdateUserSettings } from "@nx/firebase";
+import { TabGroup, Toggle } from "@nx/ui";
+import { onUpdateUserSettings } from "@nx/firebase";
 import { Modes } from "@nx/shared-assets";
 
 interface Props {
@@ -28,38 +28,28 @@ const MainHeader: React.FC<Props> = (props) => {
 		onUpdateUserSettings(props.userId, { instructions: value });
 	};
 
-	const selectedStyle = {
-		borderBottom: `0.5rem solid ${Colors.blue}`,
-	};
-	const deselectedStyle = {
-		opacity: 0.5,
-		borderBottom: `0.5rem solid transparent`,
-	};
-
 	return (
 		<Container>
-			<ModesContainer>
-				<Button
-					slug="edit"
-					name="Edit"
-					skin={ButtonStyle.CLEAR}
-					icon="pencil"
-					onClick={() => onChangeModes(Modes.EDIT)}
-					style={
-						props.selectedMode === Modes.EDIT ? selectedStyle : deselectedStyle
-					}
-				/>
-				<Button
-					slug="play"
-					name="Play"
-					skin={ButtonStyle.CLEAR}
-					icon="play"
-					onClick={() => onChangeModes(Modes.PLAY)}
-					style={
-						props.selectedMode === Modes.PLAY ? selectedStyle : deselectedStyle
-					}
-				/>
-			</ModesContainer>
+			<TabGroup
+				showLabels
+				tabs={[
+					{
+						slug: "edit",
+						label: "Edit",
+						icon: "pencil",
+						onClick: () => onChangeModes(Modes.EDIT),
+						selected: props.selectedMode === Modes.EDIT,
+					},
+					{
+						slug: "play",
+						label: "Play",
+						icon: "play",
+						onClick: () => onChangeModes(Modes.PLAY),
+						selected: props.selectedMode === Modes.PLAY,
+					},
+				]}
+			/>
+
 			<Toggles>
 				<Toggle
 					slug="sound"
@@ -101,20 +91,6 @@ const Container = styled("div")({
 	alignItems: "center",
 	padding: "0 2rem",
 	justifyContent: "space-between",
-});
-
-const ModesContainer = styled("div")({
-	display: "flex",
-	alignItems: "center",
-	justifyContent: "flex-start",
-	gap: "2rem",
-	height: "100%",
-	"> * ": {
-		height: "inherit",
-		button: {
-			height: "inherit",
-		},
-	},
 });
 
 const Toggles = styled("div")({

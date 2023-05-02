@@ -8,6 +8,8 @@ interface Props {
 	setActive: (value: boolean) => void;
 	popover: ReactElement;
 	target: ReactElement;
+	position?: "left" | "right";
+	maxHeight?: number;
 }
 
 export const Popover: React.FC<Props> = (props) => {
@@ -15,7 +17,7 @@ export const Popover: React.FC<Props> = (props) => {
 		<ReactPopover
 			isOpen={props.active}
 			onClickOutside={() => props.setActive(!props.active)}
-			positions={["left"]}
+			positions={props.position ? [props.position] : ["left"]}
 			align="start"
 			content={({ position, childRect, popoverRect }) => (
 				<ArrowContainer
@@ -25,18 +27,17 @@ export const Popover: React.FC<Props> = (props) => {
 					arrowColor={Colors.gray7}
 					arrowSize={8}
 				>
-					<Wrapper>{props.popover}</Wrapper>
+					<Wrapper maxHeight={props.maxHeight}>{props.popover}</Wrapper>
 				</ArrowContainer>
 			)}
 		>
-			{props.target}
+			<div>{props.target}</div>
 		</ReactPopover>
 	);
 };
 
-const Wrapper = styled("div")({
+const Wrapper = styled("div")((props: { maxHeight?: number }) => ({
 	display: "flex",
-	flexDirection: "column",
 	boxShadow: Shadows.standard,
 	borderWidth: 1,
 	borderStyle: "solid",
@@ -46,7 +47,7 @@ const Wrapper = styled("div")({
 	overflow: "scroll",
 	padding: 0,
 	color: Colors.white,
-	maxHeight: "22rem",
+	maxHeight: props.maxHeight ? `${props.maxHeight}rem` : "unset",
 	minWidth: "12rem",
 	width: "max-content",
-});
+}));

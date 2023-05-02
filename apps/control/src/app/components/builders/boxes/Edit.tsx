@@ -191,7 +191,7 @@ const BoxesEdit: React.FC<Props> = (props) => {
 
 	return (
 		<>
-			<Section border paddingBottom>
+			<Section border padding paddingBottom>
 				<DisplayOptions
 					selectedFileId={selectedFileId}
 					name={file.name}
@@ -202,7 +202,7 @@ const BoxesEdit: React.FC<Props> = (props) => {
 					themes={boxesThemes}
 				/>
 			</Section>
-			<Section>
+			<Section padding>
 				<div>
 					<Button icon="plus" slug="additem" onClick={onAddItem} />
 					<Button
@@ -238,7 +238,7 @@ const BoxesEdit: React.FC<Props> = (props) => {
 					/>
 				</div>
 			</Section>
-			<Section fullHeight paddingBottom>
+			<Section fullHeight padding paddingBottom>
 				{!Object.entries(file?.items).length ? (
 					<AddMoreContent>Add more items to play</AddMoreContent>
 				) : (

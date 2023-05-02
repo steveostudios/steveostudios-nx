@@ -14,3 +14,4 @@ export * from "./NumberInput";
 export * from "./ColorPicker";
 export * from "./Section";
 export * from "./Popover";
+export * from "./TabGroup";

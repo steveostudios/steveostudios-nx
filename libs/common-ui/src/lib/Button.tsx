@@ -50,7 +50,7 @@ export const Button: React.FC<Props> = (props) => {
 const Container = styled("div")({}, (props: { flex?: boolean }) => {
 	let options = {};
 	if (props.flex) {
-		options = { ...options, flex: "1 0", width: "100%" };
+		options = { ...options, width: "100%" };
 	}
 
 	return options;
@@ -157,7 +157,7 @@ const ButtonElement = styled("button")(
 			};
 		}
 		if (props.flex) {
-			options = { ...options, flex: "1 0", width: "100%" };
+			options = { ...options, width: "100%" };
 		}
 
 		return options;

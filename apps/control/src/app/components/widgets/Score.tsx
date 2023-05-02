@@ -160,7 +160,7 @@ const Score: React.FC<Props> = (props) => {
 				show={props.score.show}
 				onChangeShow={onChangeShow}
 			/>
-			<Section>
+			<Section padding>
 				<Button slug="addTeam" name="Team" icon="plus" onClick={onAddItem} />
 				<NumberInput
 					slug="pointAmount"
@@ -170,7 +170,7 @@ const Score: React.FC<Props> = (props) => {
 					onChange={onChangePointAmount}
 				/>
 			</Section>
-			<Section fullHeight paddingBottom>
+			<Section fullHeight padding paddingBottom>
 				<List>
 					{props.score.teams &&
 						Object.entries(props.score.teams)

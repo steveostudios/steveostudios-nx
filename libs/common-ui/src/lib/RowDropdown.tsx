@@ -48,6 +48,7 @@ export const RowDropdown: React.FC<Props> = (props) => {
 			<Popover
 				active={active}
 				setActive={(value) => setActive(value)}
+				maxHeight={22}
 				target={
 					<SelectButton active={active}>
 						<Item
