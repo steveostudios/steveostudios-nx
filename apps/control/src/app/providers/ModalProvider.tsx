@@ -1,12 +1,12 @@
-import { useContext, createContext, ReactNode, FunctionComponent} from "react";
+import { useContext, createContext } from "react";
 import { ModalProps } from "@nx/ui";
 
 export const ModalContext = createContext({
-  push(options: ModalProps) {}
+	pushModal(options: ModalProps) {},
 });
 
 export const useModals = () => {
-  const actions = useContext(ModalContext)
+	const actions = useContext(ModalContext);
 
-  return actions;
-}
+	return actions;
+};

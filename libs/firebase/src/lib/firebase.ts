@@ -1,26 +1,25 @@
-export const hello = "hello world";
-
-// import { Builders } from "@nx/shared-assets";
 import { initializeApp } from "firebase/app";
 import {
-	createUserWithEmailAndPassword,
-	getAuth,
 	signInWithEmailAndPassword,
+	getAuth,
 	signOut,
+	createUserWithEmailAndPassword,
 } from "firebase/auth";
+import { uuidv4 } from "@firebase/util";
 import {
 	collection,
+	doc,
+	getDocs,
+	getDoc,
 	getFirestore,
 	onSnapshot,
-	doc,
 	updateDoc,
-	addDoc,
-	arrayUnion,
-	arrayRemove,
+	setDoc,
 	deleteDoc,
-	deleteField,
 } from "firebase/firestore";
-import { AnyFile, Builders, SimpleFile, UserSettings } from "@nx/shared-assets";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { AnyDoc, Book } from "./types";
+// import { fileTypeFromFile } from "file-type";
 
 const firebaseConfig = {
 	apiKey: process.env.NX_FIREBASE_API_KEY,
@@ -32,29 +31,15 @@ const firebaseConfig = {
 	measurementId: process.env.NX_FIREBASE_MEASUREMENT_ID,
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize Cloud Firestore and get a reference to the service
 const db = getFirestore(app);
 
+const storage = getStorage(app);
+
+// authorization
 export const auth = getAuth(app);
 
-interface FileTest {
-	name: string;
-	builder: string;
-}
-
-interface UserFile {
-	name: string;
-	builder: string;
-}
-
-interface UserFileMap {
-	[key: string]: UserFile;
-}
-
-// Authentication
 export const createUser = (email: string, password: string) => {
 	return createUserWithEmailAndPassword(auth, email, password);
 };
@@ -67,158 +52,174 @@ export const logout = () => {
 	return signOut(auth);
 };
 
-// Files
-export const onGetFiles = async (
-	userId: string,
-	updateState: (data: SimpleFile[] | undefined) => void
-) => {
-	const userRef = doc(db, "users", userId);
-	onSnapshot(userRef, (snapshot) => {
-		const data = snapshot.data();
-		updateState(
-			Object.entries(data?.files as UserFileMap).map(([id, item]) => ({
-				id,
-				name: item.name,
-				builder: item.builder as Builders,
-			})) || undefined
-		);
-	});
+// TODO: this will go away
+export const getCover = async (filename: string) => {
+	const coverRef = ref(storage, `books/${filename}`);
+	const downloadUrl = await getDownloadURL(coverRef);
+	return downloadUrl;
 };
 
-// - create a new file
-export const onCreateFile = async (
-	userId: string,
-	file: Omit<AnyFile, "id">
-) => {
-	const fileRef = await addDoc(collection(db, "files"), file);
-	const userRef = doc(db, "users", userId);
-	await updateDoc(userRef, {
-		[`files.${fileRef.id}`]: {
-			name: file.name,
-			builder: file.builder,
-		},
-	});
+export const uploadCover = async (url: string) => {
+	const uuid = uuidv4();
+	fetch(url)
+		.then((res) => res.blob())
+		.then((blob) => {
+			const coverRef = ref(storage, `books/${uuid}.jpg`);
+			uploadBytes(coverRef, blob).then((snapshot) => {
+				// console.log(snapshot);
+			});
+		});
+	return uuid;
 };
 
-// Delete a file
-export const onDeleteFile = async (userId: string, fileId: string) => {
-	const userRef = doc(db, "users", userId);
-	const fileRef = doc(db, "files", fileId);
-	await deleteDoc(fileRef);
-	await updateDoc(userRef, { [`files.${fileId}`]: deleteField() });
+// Update books collection
+// TODO: this will go away
+export const onUpdateBooksDoc = async (books: Book[]) => {
+	const booksRef = doc(db, "site", "books");
+	const result = convertArrayToObject(books, "id");
+	await updateDoc(booksRef, result);
 };
 
-// Rename a file
-export const onRenameFile = async (
-	userId: string,
-	fileId: string,
-	name: string
-) => {
-	const userRef = doc(db, "users", userId);
-	const fileRef = doc(db, "files", fileId);
-	await updateDoc(userRef, {
-		[`files.${fileId}`]: {
-			name: name,
-		},
-	});
-	await updateDoc(fileRef, { name });
+// convert array ([id: XXX, ...data]) to object ({XXX: {...data}})
+const convertArrayToObject = (array: any[], key: string) => {
+	const initialValue = {};
+	return array.reduce((obj, item: any) => {
+		const id = item[key];
+		delete item[key];
+		return {
+			...obj,
+			[id]: item,
+		};
+	}, initialValue);
 };
 
-// File
-// - set the user current file
-export const onSetFile = async (userId: string, fileId: string) => {
-	const userRef = doc(db, "users", userId);
-	await updateDoc(userRef, { selectedFileId: fileId });
+export const getImage = async (bucket: string, filename: string) => {
+	const imageRef = ref(storage, `${bucket}/${filename}`);
+	try {
+		const downloadUrl = await getDownloadURL(imageRef);
+		return downloadUrl;
+	} catch (error) {
+		return "";
+	}
 };
 
-// - get a file
-export const onGetFile = async (
-	fileId: string,
+// ALL IN ONE DOCUMENT
+// real-time updates for docs
+export const snapshotData = async (
+	collection: string,
 	updateState: (data: any | undefined) => void
 ) => {
-	const fileRef = doc(db, "files", fileId);
-	await onSnapshot(fileRef, (snapshot) => {
+	const dataRef = doc(db, "site", collection);
+	await onSnapshot(dataRef, (snapshot) => {
 		const data = snapshot.data();
-		updateState({
-			id: snapshot.id,
-			...data,
-		});
+		const items = Object.entries(data as AnyDoc).map(([id, item]) => ({
+			id,
+			...item,
+		}));
+		updateState(items);
 	});
 };
 
-// Settings
-export const onUpdateFileSettings = async (fileId: string, update: object) => {
-	const settingsRef = doc(db, "files", fileId);
-	await updateDoc(settingsRef, update);
-};
-
-// updateFile
-export const onUpdateFile = async (fileId: string, update: object) => {
-	console.log(fileId, update);
-	const fileRef = doc(db, "files", fileId);
-	await updateDoc(fileRef, update);
-};
-
-// get User data
-export const onGetUser = (
-	userId: string,
-	updateState: (data: string | null | undefined) => void
-) => {
-	const userRef = doc(db, "users", userId);
-	onSnapshot(userRef, (snapshot) => {
-		const data = snapshot.data();
-		updateState(data?.selectedFileId);
-	});
-};
-// get User data
-export const onGetUserSettings = async (
-	userId: string,
-	updateState: (data: UserSettings) => void
-) => {
-	const userRef = doc(db, "users", userId);
-	await onSnapshot(userRef, (snapshot) => {
-		const data = snapshot.data();
-		updateState({
-			titleGraphic: data?.titleGraphic,
-			sounds: data?.sounds,
-			instructions: data?.instructions,
-			selectedMode: data?.selectedMode,
-			selectedFileId: data?.selectedFileId,
-			selectedWidget: data?.selectedWidget,
-			score: data?.score,
-			timer: data?.timer,
-			logo: data?.logo,
+// update a document
+export const updateData = async (collection: string, data: AnyDoc[]) => {
+	const dataRef = doc(db, "site", collection);
+	const result = convertArrayToObject(data, "id");
+	console.log(result);
+	await updateDoc(dataRef, result)
+		.then((data) => {
+			console.log(data);
+		})
+		.catch((error) => {
+			console.log(error);
 		});
-	});
 };
 
-export const onUpdateUserSettings = async (userId: string, update: object) => {
-	console.log(userId, update);
-	const userRef = doc(db, "users", userId);
-	await updateDoc(userRef, update);
-};
-
-export enum ArrayAction {
-	ADD = "union",
-	REMOVE = "remove",
-}
-
-export const onUpdateArray = async (
-	fileId: string,
-	arrayName: string,
-	value: string,
-	action: ArrayAction
+// images
+export const uploadImageFromUrl = async (
+	col: string,
+	url: string,
+	extension: string
 ) => {
-	const fileRef = doc(db, "files", fileId);
-	if (action === ArrayAction.ADD) {
-		await updateDoc(fileRef, {
-			[arrayName]: arrayUnion(value),
+	const uuid = uuidv4();
+	fetch(url)
+		.then((res) => res.blob())
+		.then((blob) => {
+			const imageRef = ref(storage, `${col}/${uuid}.${extension}`);
+			uploadBytes(imageRef, blob).then((snapshot) => {
+				// console.log(snapshot);
+			});
 		});
+	return uuid;
+};
+
+export const uploadImageFromLocal = async (col: string, file: File) => {
+	const uuid = uuidv4();
+	const imageRef = ref(storage, `${col}/${uuid}.jpg`);
+	uploadBytes(imageRef, file).then((snapshot) => {
+		// console.log(snapshot);
+	});
+	return uuid;
+};
+
+// using docs and collections
+export const getAllDocs = async (
+	col: string,
+	updateState: (data: AnyDoc[]) => void
+) => {
+	const querySnapshot = await getDocs(collection(db, col));
+	const snap = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+	const items = Object.entries(snap as any[]).map(([id, item]) => ({
+		id,
+		...item,
+	}));
+	console.log(items);
+	updateState(items);
+};
+
+export const getSingleDoc = async (
+	col: string,
+	id: string,
+	updateState: (data: Partial<AnyDoc> | undefined) => void
+) => {
+	const docRef = doc(db, col, id);
+	const docSnap = await getDoc(docRef);
+	if (!docSnap.exists()) updateState(undefined);
+	const result: Partial<AnyDoc> = { ...docSnap.data(), id };
+	updateState(result);
+};
+
+export const updateSingleDoc = async (
+	col: string,
+	id: string,
+	data: Partial<AnyDoc>
+) => {
+	if (id === "new") {
+		const newId = uuidv4();
+		const docRef = doc(db, col, newId);
+		delete data.id;
+		console.log(data);
+		await setDoc(docRef, data).catch((error) => {
+			console.log(error);
+		});
+		return;
+	} else {
+		const docRef = doc(db, col, id);
+		await updateDoc(docRef, data);
 	}
-	if (action === ArrayAction.REMOVE) {
-		await updateDoc(fileRef, {
-			[arrayName]: arrayRemove(value),
-		});
-	}
-	return;
+};
+
+export const duplicateSingleDoc = async (col: string, id: string) => {
+	const docRef = doc(db, col, id);
+	const docSnap = await getDoc(docRef);
+	if (!docSnap.exists()) return;
+	const data = docSnap.data();
+	const newId = uuidv4();
+	data.name = `${data.name} (copy)`;
+	const newDocRef = doc(db, col, newId);
+	await setDoc(newDocRef, data);
+};
+
+export const deleteSingleDoc = async (col: string, id: string) => {
+	const docRef = doc(db, col, id);
+	await deleteDoc(docRef);
 };

@@ -1,105 +1,114 @@
-import styled from '@emotion/styled';
-import { ReactElement, useMemo, useState } from 'react';
+// import { ReactElement, useMemo, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
+// import { ContextMenu, ContextMenuProps, Modal } from "@nx/ui";
+import { ModalContext } from "./providers/ModalProvider";
+// import { ContextMenuContext } from "./providers/ContextMenuProvider";
+import { Modal, ModalProps } from "@nx/ui";
 import "./app.css";
-import Home from './routes/Home';
-import SignIn from "./routes/SignIn"
-import Account from './routes/Account';
-import SignUp from './routes/SignUp';
-import Manage from './routes/Manage';
-import ProtectedRoute from './routes/ProtectedRoute';
+// Routes
+import Home from "./routes/Home";
 // FontAwesome
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fal } from "@fortawesome/pro-light-svg-icons";
 import { far } from "@fortawesome/pro-regular-svg-icons";
 import { fas } from "@fortawesome/pro-solid-svg-icons";
 import { fab } from "@fortawesome/free-brands-svg-icons";
-import { ContextMenu, ContextMenuProps, Modal } from '@nx/ui';
-import { ModalContext } from './providers/ModalProvider';
-import { ModalProps } from '@nx/ui';
-import { Colors } from '@nx/style';
-import { ContextMenuContext } from './providers/ContextMenuProvider';
+import { Nav } from "./components/Nav";
+import Books from "./routes/Books";
+import { ReactElement, useEffect, useMemo, useState } from "react";
+import { Page } from "@nx/ui";
+import Bourbons from "./routes/Bourbons";
+import Resumes from "./routes/Resumes";
+import Posts from "./routes/Posts";
+import Projects from "./routes/Projects";
+import PostSingle from "./routes/Post";
+import ResumeSingle from "./routes/Resume";
+import BourbonSingle from "./routes/Bourbon";
+import ProjectSingle from "./routes/Project";
+import { BooksBulk } from "./routes/BooksBulk";
+import BookSingle from "./routes/Book";
+import { ResumesBulk } from "./routes/ResumesBulk";
+import { PostsBulk } from "./routes/PostsBulk";
 library.add(fal, far, fas, fab);
 
-
-
-
 const uid = (() => {
-  let i = 0;
-  return () => `${i++}`;
+	let i = 0;
+	return () => `${i++}`;
 })();
 
-export function App() { 
-  const [modals, setModals] = useState<ReactElement[]>([]);
-  const [contextMenu, setContextMenu] = useState<ReactElement | null>();
+export function App() {
+	useEffect(() => {}, []);
+	const [modals, setModals] = useState<ReactElement[]>([]);
+	// const [contextMenu, setContextMenu] = useState<ReactElement | null>();
 
-  const actions = useMemo(
-    () => ({
-      push(options: ModalProps) {
-        const key = uid();
-        console.log(key)
-        const close = () => {
-          setModals((modals) => {
-            return modals.filter((modal) => modal.key !== key);
-          });
-        };
+	const actions = useMemo(
+		() => ({
+			pushModal(options: ModalProps) {
+				const key = uid();
+				console.log(key);
+				const close = () => {
+					setModals((modals) => {
+						return modals.filter((modal) => modal.key !== key);
+					});
+				};
 
-        const modal =
-          <Modal key={key} close={close} {...options} />
-        setModals((modals) => [...modals, modal]);
-      }
-    }),
-    []
-  );
+				const modal = <Modal key={key} close={close} {...options} />;
+				setModals((modals) => [...modals, modal]);
+			},
+		}),
+		[]
+	);
 
-  const ContextMenuActions = useMemo(
-    () => ({
-      addContextMenu(options: ContextMenuProps) {
-        console.log(options)
-        const close = () => {
-          console.log("close")
-          setContextMenu(null);
-        };
+	// const ContextMenuActions = useMemo(
+	// 	() => ({
+	// 		addContextMenu(options: ContextMenuProps) {
+	// 			console.log(options);
+	// 			const close = () => {
+	// 				console.log("close");
+	// 				setContextMenu(null);
+	// 			};
 
-        setContextMenu(<ContextMenu close={close} {...options} />);
-      }
-    }),
-    []
-  );
+	// 			setContextMenu(<ContextMenu close={close} {...options} />);
+	// 		},
+	// 	}),
+	// 	[]
+	// );
 
-  return (
-    <StyledApp>
-      <Router>
-        <ModalContext.Provider value={actions}>
-          <ContextMenuContext.Provider value={ContextMenuActions}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/signin" element={<SignIn />} />
-              <Route path="/signup" element={<SignUp />} />              
-              <Route path="/account" element={<ProtectedRoute><Account /></ProtectedRoute>} />
-                <Route path="/manage" element={
-              <ProtectedRoute>
-                <Manage />
-              </ProtectedRoute>
-                } /> 
-            </Routes>
-            {modals}
-            {contextMenu}
-          </ContextMenuContext.Provider>
-        </ModalContext.Provider>
-      </Router>
-    </StyledApp>
-  );
+	return (
+		<Page>
+			<Router>
+				<ModalContext.Provider value={actions}>
+					{/* 
+					<ContextMenuContext.Provider value={ContextMenuActions}> */}
+					<Nav />
+					<Routes>
+						<Route path="/" element={<Home />} />
+
+						<Route path="/books" element={<Books />} />
+						<Route path="/bourbons" element={<Bourbons />} />
+						<Route path="/resumes" element={<Resumes />} />
+						<Route path="/posts" element={<Posts />} />
+						<Route path="/projects" element={<Projects />} />
+
+						<Route path="/books/bulk" element={<BooksBulk />} />
+						<Route path="/resumes/bulk" element={<ResumesBulk />} />
+						<Route path="/posts/bulk" element={<PostsBulk />} />
+						<Route path="/bourbon/:id?" element={<BourbonSingle />} />
+						<Route path="/book/:id?" element={<BookSingle />} />
+						<Route path="/resume/:id?" element={<ResumeSingle />} />
+						<Route path="/post/:id?" element={<PostSingle />} />
+						<Route path="/project/:id?" element={<ProjectSingle />} />
+					</Routes>
+					{modals}
+					{/* 
+						{contextMenu} */}
+					{/* </ContextMenuContext.Provider>
+					 */}
+				</ModalContext.Provider>
+			</Router>
+		</Page>
+	);
 }
 
 export default App;
-
-const StyledApp = styled("div")({
-  backgroundColor: Colors.gray10,
-  height: "100vh",
-  overflow: "hidden",
-  width: "100%",
-  margin: 0,
-  padding: 0
-})

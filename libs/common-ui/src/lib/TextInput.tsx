@@ -1,17 +1,14 @@
 import React, { FormEvent } from "react";
-import { Colors } from "@nx/style";
+import { Colors } from "./Colors";
 import styled from "@emotion/styled";
 import { Label } from "./Label";
+import { CommonInputProps } from "./types";
 
-interface Props {
-	slug: string;
-	label?: string;
-	inline?: boolean;
+interface Props extends CommonInputProps {
 	onChange: (value: string) => void;
-	disabled?: boolean;
+	onEnter?: () => void;
 	value: string;
 	type?: "text" | "phone" | "password" | "email";
-	locked?: boolean;
 	placeholder?: string;
 }
 
@@ -22,54 +19,35 @@ export const TextInput: React.FC<Props> = (props) => {
 		return;
 	};
 
+	const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === "Enter" && props.onEnter) props.onEnter();
+	};
+
+	if (!props.visible) return null;
+
 	return (
-		<Container inline={props.inline} label={props.label}>
-			<Label slug={props.slug} label={props.label} />
+		<>
+			{props.showLabel && <Label slug={props.slug} label={props.label} />}
 			<Input
+				name={props.slug}
 				placeholder={props.placeholder}
 				type={props.type ? props.type : "text"}
 				value={props.value}
 				onChange={onChange}
-				disabled={props.disabled}
+				disabled={props.disabled || props.readonly}
+				readonly={props.readonly}
+				onKeyPress={onKeyPress}
 			/>
-		</Container>
+		</>
 	);
 };
 
-const Container = styled("div")(
-	{
-		flex: 1,
-		height: "4rem",
-		"& > *": {
-			display: "flex",
-			alignItems: "center",
-			justifyContent: "space-between",
-		},
-	},
-	(props: { inline?: boolean; label?: string }) => {
-		if (!props.inline && !!props.label) {
-			return {
-				height: "initial",
-				gap: "1rem",
-				label: {
-					height: "4rem",
-				},
-			};
-		}
-		return {};
-	}
-);
-
-const Input = styled("input")({
-	height: "4rem",
-	borderWidth: 1,
-	borderStyle: "solid",
-	borderColor: Colors.gray7,
-	borderRadius: "0.5rem",
+const Input = styled("input")((props: { readonly?: boolean }) => ({
+	border: "none",
 	boxSizing: "border-box",
-	backgroundColor: "transparent",
-	color: Colors.white,
-	padding: "1rem",
-	fontSize: "1.75rem",
-	width: "100%",
-});
+	borderRadius: "0.5rem",
+	backgroundColor: props.readonly ? "transparent" : Colors.trim,
+	padding: props.readonly ? 0 : "1rem 2rem",
+	fontFamily: "monospace",
+	textAlign: "start",
+}));

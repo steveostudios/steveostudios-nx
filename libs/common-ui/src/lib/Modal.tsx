@@ -1,13 +1,7 @@
-import React, {
-	useState,
-	useEffect,
-	ReactElement,
-	ReactNode,
-	FunctionComponent,
-} from "react";
-import { Colors, Shadows } from "@nx/style";
+import React, { useState, useEffect, FunctionComponent } from "react";
 import styled from "@emotion/styled";
-import { Button, ButtonStyle } from "./Button";
+import { Button } from "./Button";
+import { Colors, Shadows } from "./Colors";
 
 export interface ModalProps {
 	component: FunctionComponent<any>;
@@ -15,9 +9,11 @@ export interface ModalProps {
 	close?: () => void;
 	onCancel?: () => void;
 	onConfirm?: (data: any) => void;
+	onClickOutside?: () => void;
 	onLiveUpdate?: (data: any) => void;
 	initialData?: any;
 	data?: any;
+	destructive?: boolean;
 }
 
 export const Modal: React.FC<ModalProps> = (props) => {
@@ -25,6 +21,11 @@ export const Modal: React.FC<ModalProps> = (props) => {
 
 	const onClose = () => {
 		if (props.close) props.close();
+	};
+
+	const onClickOutside = () => {
+		if (props.onClickOutside) props.onClickOutside();
+		onClose();
 	};
 
 	const onConfirm = () => {
@@ -46,16 +47,11 @@ export const Modal: React.FC<ModalProps> = (props) => {
 	const Component = props.component;
 
 	return (
-		<Wrapper onClick={onClose}>
+		<Wrapper onClick={onClickOutside}>
 			<Container onClick={(e) => e.stopPropagation()}>
 				<Header>
 					<span>{props.title}</span>
-					<Button
-						slug="close"
-						skin={ButtonStyle.CLEAR}
-						icon="times"
-						onClick={onClose}
-					/>
+					<Button slug="close" icon="times" onClick={onClose} />
 				</Header>
 				<Body>
 					<Component
@@ -68,12 +64,7 @@ export const Modal: React.FC<ModalProps> = (props) => {
 					typeof props.onCancel === "function") && (
 					<Footer>
 						{typeof props.onConfirm === "function" && (
-							<Button
-								slug="confirm"
-								skin={ButtonStyle.SECONDARY}
-								name="Yes"
-								onClick={onConfirm}
-							/>
+							<Button slug="confirm" name="Yes" onClick={onConfirm} />
 						)}
 						{typeof props.onCancel === "function" && (
 							<Button slug="cancel" name="No" onClick={onCancel} />
@@ -86,7 +77,7 @@ export const Modal: React.FC<ModalProps> = (props) => {
 };
 
 const Wrapper = styled("div")({
-	position: "absolute",
+	position: "fixed",
 	display: "flex",
 	alignItems: "center",
 	justifyContent: "center",
@@ -95,19 +86,19 @@ const Wrapper = styled("div")({
 	left: 0,
 	width: "100%",
 	zIndex: 100,
-	backgroundColor: Colors.black75,
+	backgroundColor: Colors.darkOverlay,
 });
 
 const Container = styled("div")({
-	backgroundColor: Colors.gray9,
+	backgroundColor: Colors.white,
 	display: "flex",
 	flexDirection: "column",
 	minWidth: "48rem",
 	borderWidth: 1,
 	borderStyle: "solid",
-	borderColor: Colors.gray7,
+	borderColor: Colors.trim,
 	borderRadius: "1rem",
-	boxShadow: Shadows.purpleGlow,
+	boxShadow: Shadows.standard,
 });
 
 const Header = styled("div")({
@@ -120,7 +111,7 @@ const Header = styled("div")({
 	justifyContent: "space-between",
 	borderBottomWidth: "1px",
 	borderBottomStyle: "solid",
-	borderBottomColor: Colors.gray8,
+	borderBottomColor: Colors.trim,
 });
 
 const Body = styled("div")({

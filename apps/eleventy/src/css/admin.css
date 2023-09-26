@@ -1,0 +1,176 @@
+.page.admin {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 3rem;
+}
+
+.page.admin h2 {
+  display: flex;
+  user-select: none;
+  gap: 1rem;
+}
+
+.page.admin h2 svg {
+  height: 1.5rem;
+  transition: all 0.125s ease-in-out;
+  transform: rotate(-90deg);
+}
+
+.page.admin h2.visible svg {
+  transform: rotate(0deg);
+}
+
+.page.admin section {
+  display: flex;
+  flex-direction: column;
+  max-height: 0;
+  transition: all 0.125s ease-in-out;
+  width: 100%;
+  overflow: hidden;
+  padding-bottom: 3rem;
+}
+
+.page.admin section.visible {
+  height: auto;
+  max-height: 100rem;
+}
+
+.page.admin section table tr.protected {
+  opacity: 0.25;
+}
+
+/* button sections */
+.page.admin .buttons {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  gap: 0.5rem;
+  height: 4rem;
+}
+
+.page.admin .buttons button {
+  background: var(--primary-color);
+  padding: 0.75rem 1rem;
+  color: var(--black);
+  border: none;
+  border-radius: 24px;
+  text-decoration: none;
+  font-weight: 700;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 12rem;
+}
+
+.page.admin .buttons .reset {
+  width: 6rem;
+}
+
+.page.admin button:disabled {
+  background-color: var(--trim);
+  color: var(--white);
+}
+
+.page.admin .buttons input {
+  font-size: 1.25rem;
+  font-family: monospace;
+  background-color: var(--trim);
+  border: none;
+  text-align: end;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.25rem;
+  width: 6rem;
+}
+
+.page.admin .table {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.page.admin .table .book {
+  display: flex;
+  border-bottom: 1px solid var(--trim);
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+.page.admin .table .book .book-section {
+  display: flex;
+  align-items: center;
+}
+
+.page.admin .table .book .book-section:first-of-type {
+  flex: 1;
+}
+.page.admin .table .book .book-section > div {
+  flex-direction: row;
+  padding: 0 0.5rem;
+}
+
+.page.admin .table .book .title {
+  flex: 1;
+}
+
+.page.admin .table .book .cover img {
+  width: 2rem;
+  margin-top: 0.25rem;
+  height: 3rem;
+}
+
+.page.admin .table .book input {
+  font-size: 1.25rem;
+  font-family: monospace;
+  background-color: var(--trim);
+  border: none;
+  text-align: end;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.25rem;
+}
+
+/* Stars */
+.page.admin section .table .book .stars > div {
+  display: flex;
+}
+
+.page.admin section .table .book .stars button {
+  fill: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.5rem;
+  width: 2.5rem;
+  background-color: var(--trim);
+  border: none;
+}
+
+.page.admin section .table .book .stars button.active {
+  fill: var(--primary-color);
+}
+
+.page.admin section .table .book .stars button:first-of-type {
+  border-radius: 0.5rem 0 0 0.5rem;
+}
+
+.page.admin section .table .book .stars button:last-of-type {
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.page.admin section .table .book .stars button svg {
+  width: 1.25rem;
+  margin-bottom: 0.25rem;
+}
+
+@media (max-width: 767px) {
+  .page.admin .table .book {
+    /* flex-direction: column; */
+  }
+
+  .page.admin .table .book .book-section {
+    flex-basis: 100%;
+    margin-bottom: 0.5rem;
+  }
+  .page.admin .buttons button {
+    width: 6rem;
+  }
+}

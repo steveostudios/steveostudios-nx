@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 import styled from "@emotion/styled";
 
 interface Props {
@@ -9,12 +9,11 @@ interface Props {
 export const Label: React.FC<Props> = (props) => {
   if (!props.label) return null;
 
-  return (
-    <Container htmlFor={props.slug}>{props.label}</Container>
-  );
+  return <Container htmlFor={props.slug}>{props.label}</Container>;
 };
 
 const Container = styled("label")({
-
-})
-
+  display: "flex",
+  flexDirection: "column",
+  fontSize: "2rem",
+});

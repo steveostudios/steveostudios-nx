@@ -1,0 +1,16 @@
+ <div class="slider">
+  {% for slide in project.slides %}
+    {% assign src = slide.thumbnails.large.url %}
+  {% assign alt = project.name %} 
+
+    {% if forloop.first == true %}
+      <input type="radio" name="slide-switch" id="{{ slide.id }}" checked="checked" />
+    {% else %}
+      <input type="radio" name="slide-switch" id="{{ slide.id }}" />
+    {% endif %}
+    <label for="{{ slide.id }}">
+      {% image src, alt, "project" %}
+    </label>
+    {% image src, alt, "project" %}
+  {% endfor %}
+</div>

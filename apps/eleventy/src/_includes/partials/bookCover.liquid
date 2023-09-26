@@ -1,0 +1,39 @@
+{% assign src = book['cover'] %}
+{% assign alt = book['title'] %}
+
+{% if book.fiction %}
+{% assign fiction = "fiction" %}
+{% else %}
+{% assign fiction = "nonfiction" %}
+{% endif %}
+
+{% if book.review == blank %}
+{% assign review = "false" %}
+{% else %}
+{% assign review = "true" %}
+{% endif %}
+
+{% assign sideWidth = book.pages | divided_by: 100 | times: 6 | plus: 4 | floor %}
+
+<div class="book-cover" 
+  data-fiction="{{ fiction }}" 
+  data-stars="{{ book.stars }}" 
+  data-format="{{ book.format }}" 
+  data-review="{{ review }}" 
+  style="--sideWidth: {{ sideWidth }}px; "
+>
+  <div class="book-cover-box">
+    <div class="book-cover-box-face">
+      <a href="/book/{{ book.title | slug }}">
+        {% if src %}
+          {% image src, alt, "books" %}
+        {% endif %} 
+      </a>
+    </div>
+    <div class="book-cover-box-side"></div>
+    <div class="book-cover-box-back"></div>
+  </div>
+  {% if book.progress < 1 %}
+    <progress id="file" value="{{book.progress}}"></progress>
+  {% endif %}
+</div>

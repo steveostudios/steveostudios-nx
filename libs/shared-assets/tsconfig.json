@@ -14,7 +14,7 @@
 		"noFallthroughCasesInSwitch": true
 	},
 	"files": [],
-	"include": ["src", ".d.ts"],
+	"include": ["src", ".d.ts", "../firebase/src/lib/types.tsx"],
 	"references": [
 		{
 			"path": "./tsconfig.lib.json"

@@ -1,0 +1,15 @@
+---
+title: Posts
+layout: layouts/base.liquid
+---
+<div class="page posts">
+  {% for post in posts %}
+   
+    <li>
+      <a href="/post/{{ post.title | slugify }}">
+          <div>{{ post.title }}</div> <div class="date">{{ post.date | date: "%B %e, %Y" }}</div>
+
+      </a>
+    </li>
+  {% endfor %}
+</div>
