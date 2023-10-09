@@ -1,19 +1,19 @@
 <aside>
-  {%- if project.front_end -%}
+  {%- if project.frontend -%}
     <section>
       <h4>Front End</h4>
       <ul>
-        {% for item in project.front_end %}
+        {% for item in project.frontend %}
         <li>{{ item }}</li>
         {% endfor %}
       </ul>
     </section>
   {%- endif -%}
-  {%- if project.back_end -%}
+  {%- if project.backend -%}
     <section>
       <h4>Back End</h4>
       <ul>
-        {% for item in project.back_end %}
+        {% for item in project.backend %}
         <li>{{ item }}</li>
         {% endfor %}
       </ul>
@@ -29,14 +29,18 @@
       </ul>
     </section>
   {%- endif -%}
-  {%- if url -%}
-    <section>
-      <a href="{{ url }}">Go to site</a>
-    </section>
+  {%- if project.url -%}
+    {%- if project.hiddenUrl != true -%}
+      <section>
+        <a href="{{ project.url }}">Go to site</a>
+      </section>
+    {%- endif -%}
   {%- endif -%}
-  {%- if repo -%}
-    <section>
-      <a href="{{ repo }}">Go to repo</a>
-    </section>
+  {%- if project.repo -%}
+    {%- if project.hiddenRepo != true -%}
+      <section>
+        <a href="{{ project.repo }}">Go to repo</a>
+      </section>
+    {%- endif -%}
   {%- endif -%}
 </aside>

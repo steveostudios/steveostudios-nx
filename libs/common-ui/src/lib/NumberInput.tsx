@@ -16,7 +16,7 @@ interface Props extends CommonInputProps {
 export const NumberInput: React.FC<Props> = (props) => {
 	const onChange = (e: FormEvent<HTMLInputElement>) => {
 		if (props.disabled) return false;
-		props.onChange(parseInt(e.currentTarget.value));
+		props.onChange(parseFloat(e.currentTarget.value));
 		return;
 	};
 

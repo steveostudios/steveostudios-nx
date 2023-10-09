@@ -1,5 +1,4 @@
 require("dotenv").config();
-
 const { getFirebaseRecords, getImage } = require("../../utils/firebase");
 
 module.exports = async () => {

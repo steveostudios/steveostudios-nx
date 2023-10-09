@@ -1,14 +1,21 @@
 require("dotenv").config();
-
-const { getRecords } = require("./../../utils/airtable");
+const { getFirebaseRecords, getImage } = require("../../utils/firebase");
 
 module.exports = async () => {
-	return [];
-	const results = await getRecords(
-		process.env.AIRTABLE_BASE_RESUMES_BASE,
-		process.env.AIRTABLE_BASE_RESUMES_TABLE,
-		"resumes"
-	);
+	const results = await getFirebaseRecords("resumes");
 
-	return results.filter((resume) => resume.active);
+	const fixed = await results.map(async (resume) => {
+		const image = resume.logo
+			? await getImage("resumes", resume.logo)
+					.then((url) => {
+						return url;
+					})
+					.catch((error) => {
+						console.log(error);
+					})
+			: null;
+
+		return { ...resume, image };
+	});
+	return await Promise.all(fixed);
 };

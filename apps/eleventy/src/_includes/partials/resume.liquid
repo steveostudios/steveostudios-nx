@@ -90,8 +90,8 @@
       {% endfor %}
     </ul>
   </div>
-  {% assign src = resume.logo[0].thumbnails.large.url %}
+  {% if resume.image %}
+  {% assign src = resume.image %}
   {% assign alt = resume.name %}
-  {% if resume.logo %}
     <div class="thankyou">Thank you for your time {% image src, alt, "resume", "png" %}</div>
   {% endif %}

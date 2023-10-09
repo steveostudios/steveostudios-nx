@@ -4,8 +4,8 @@ layout: layouts/base.liquid
 ---
 <div class="page projects">
   {% for project in projects %}
-    {% assign src = project['slides'][0].thumbnails.large.url %}
-    {% assign alt = project.name %} 
+    {% assign src = project.images[0].url %}
+    {% assign alt = project.images[0].alt %} 
     <li>
       <a href="/project/{{ project.name | slugify }}">
         {% image src, alt, "project" %}
@@ -13,13 +13,13 @@ layout: layouts/base.liquid
           <h2>{{ project.name }}</h2>
           <p class="client">{{ project.client }}</p>
           <ul class="stack">
-            {%- if project.front_end -%}
-              {% for item in project.front_end %}
+            {%- if project.frontend -%}
+              {% for item in project.frontend %}
                 <li class="front">{{ item }}</li>
               {% endfor %}
             {%- endif -%}
-            {%- if project.back_end -%}
-              {% for item in project.back_end %}
+            {%- if project.backend -%}
+              {% for item in project.backend %}
                 <li class="back">{{ item }}</li>
               {% endfor %}
             {%- endif -%}

@@ -1,9 +1,17 @@
 import styled from "@emotion/styled";
-import { Colors } from "@nx/ui";
+import { Button, Colors } from "@nx/ui";
+import { signOut } from "firebase/auth";
+import { useContext } from "react";
 
 import { Link } from "react-router-dom";
+import { AuthContext } from "../providers/AuthProvider";
+import { logout } from "@nx/firebase";
 
 export const Nav = () => {
+	const auth = useContext(AuthContext);
+	const onLogout = () => {
+		logout();
+	};
 	return (
 		<NavContainer>
 			<LeftSide>
@@ -11,29 +19,38 @@ export const Nav = () => {
 					<DropdownLink to="/">Home</DropdownLink>
 				</Dropdown>
 			</LeftSide>
-			<RightSide>
-				<Dropdown>
-					<DropdownLink to="/projects">Projects</DropdownLink>
-				</Dropdown>
-				<Dropdown>
-					<DropdownLink to="/posts">Posts</DropdownLink>
-				</Dropdown>
-				<Dropdown>
-					<DropdownLink to="/bourbons">Bourbons</DropdownLink>
-				</Dropdown>
-				<Dropdown>
-					<DropdownLink to="/resumes">Resumes</DropdownLink>
-				</Dropdown>
-				<Dropdown>
-					<DropdownLink to="/books">Books</DropdownLink>
-				</Dropdown>
-				<Dropdown>
-					<DropdownLink to="/books">Steve</DropdownLink>
-					<DropdownItems className="dropdown">
-						<NavLink to="/book/new">Logout</NavLink>
-					</DropdownItems>
-				</Dropdown>
-			</RightSide>
+			{auth?.user && (
+				<RightSide>
+					<Dropdown>
+						<DropdownLink to="/projects">Projects</DropdownLink>
+					</Dropdown>
+					<Dropdown>
+						<DropdownLink to="/posts">Posts</DropdownLink>
+					</Dropdown>
+					<Dropdown>
+						<DropdownLink to="/bourbons">Bourbons</DropdownLink>
+					</Dropdown>
+					<Dropdown>
+						<DropdownLink to="/resumes">Resumes</DropdownLink>
+					</Dropdown>
+					<Dropdown>
+						<DropdownLink to="/books">Books</DropdownLink>
+					</Dropdown>
+					<Dropdown>
+						<DropdownLink to="/books">{auth.user?.email}</DropdownLink>
+						<DropdownItems className="dropdown">
+							<Button slug="logout" onClick={onLogout} name="Logout" />
+						</DropdownItems>
+					</Dropdown>
+				</RightSide>
+			)}
+			{!auth?.user && (
+				<RightSide>
+					<Dropdown>
+						<DropdownLink to="/">Sign In</DropdownLink>
+					</Dropdown>
+				</RightSide>
+			)}
 		</NavContainer>
 	);
 };

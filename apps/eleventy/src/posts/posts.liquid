@@ -10,7 +10,7 @@ permalink: "post/{{ post.title | slugify }}/"
     <h1><div>{{ post.title }}</div> <div class="date">{{ post.date | date: "%B %e, %Y" }}</div></h1>
     <div class="content">
       <article>
-        {% markdown post.content, post.image, "posts" %}
+        {{ post.content }}
       </article>
     </div>
   </div>

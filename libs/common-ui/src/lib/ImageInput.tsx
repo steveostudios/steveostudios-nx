@@ -5,10 +5,14 @@ import { Colors } from "./Colors";
 import { Button, ButtonColor } from "./Button";
 
 interface ImageProps {
+	slug?: string;
+	label?: string;
 	bucket: string;
 	width?: number;
 	height?: number;
 	alt: string;
+	visible?: boolean;
+	showLabel?: boolean;
 	onChange: (value: File | string | null) => void;
 	value?: File | string;
 }

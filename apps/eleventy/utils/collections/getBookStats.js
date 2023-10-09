@@ -68,30 +68,6 @@ const getStats = (collectionApi) => {
 	const totalBooks = total.length;
 	const totalPages = total.reduce((acc, cur) => acc + cur.pages, 0);
 
-	console.log(
-		JSON.stringify(
-			books
-				.filter((book) => new Date(book.dateFinish).getFullYear() === 2004)
-				.map((book) => book.title),
-			null,
-			2
-		),
-		"2004"
-	);
-	console.log(
-		JSON.stringify(
-			books
-				.filter((book) => new Date(book.dateFinish).getFullYear() === 2004)
-				.map((book, i) => i + ": " + book.title),
-			null,
-			2
-		)
-	);
-	console.log(
-		books
-			.filter((book) => new Date(book.dateFinish).getFullYear() === 2004)
-			.map((book) => book.title).length
-	);
 	console.log(yearStats);
 	return {
 		mostBooksBooks,

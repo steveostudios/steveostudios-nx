@@ -86,6 +86,7 @@ export interface Bourbon {
 	rye: boolean;
 	singleBarrel: boolean;
 	volume: number;
+	image: string;
 	docType: "BOURBON";
 }
 

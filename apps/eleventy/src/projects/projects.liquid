@@ -12,7 +12,7 @@ permalink: "project/{{ project.name | slugify }}/"
       {% include 'partials/slider' %}
       {% include 'partials/projectMeta' %}
       <article>
-        {% markdown project.content %}
+        {{ project.content }}
       </article>
     </div>
   </div>

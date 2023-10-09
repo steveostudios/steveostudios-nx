@@ -1,9 +1,10 @@
-// import { ReactElement, useMemo, useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
-// import { ContextMenu, ContextMenuProps, Modal } from "@nx/ui";
+import {
+	BrowserRouter as Router,
+	Routes,
+	Route,
+	Navigate,
+} from "react-router-dom";
 import { ModalContext } from "./providers/ModalProvider";
-// import { ContextMenuContext } from "./providers/ContextMenuProvider";
 import { Modal, ModalProps } from "@nx/ui";
 import "./app.css";
 // Routes
@@ -16,7 +17,7 @@ import { fas } from "@fortawesome/pro-solid-svg-icons";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import { Nav } from "./components/Nav";
 import Books from "./routes/Books";
-import { ReactElement, useEffect, useMemo, useState } from "react";
+import { ReactElement, useContext, useEffect, useMemo, useState } from "react";
 import { Page } from "@nx/ui";
 import Bourbons from "./routes/Bourbons";
 import Resumes from "./routes/Resumes";
@@ -30,6 +31,7 @@ import { BooksBulk } from "./routes/BooksBulk";
 import BookSingle from "./routes/Book";
 import { ResumesBulk } from "./routes/ResumesBulk";
 import { PostsBulk } from "./routes/PostsBulk";
+import { AuthContext, AuthContextProvider } from "./providers/AuthProvider";
 library.add(fal, far, fas, fab);
 
 const uid = (() => {
@@ -60,55 +62,139 @@ export function App() {
 		[]
 	);
 
-	// const ContextMenuActions = useMemo(
-	// 	() => ({
-	// 		addContextMenu(options: ContextMenuProps) {
-	// 			console.log(options);
-	// 			const close = () => {
-	// 				console.log("close");
-	// 				setContextMenu(null);
-	// 			};
-
-	// 			setContextMenu(<ContextMenu close={close} {...options} />);
-	// 		},
-	// 	}),
-	// 	[]
-	// );
-
 	return (
 		<Page>
 			<Router>
-				<ModalContext.Provider value={actions}>
-					{/* 
-					<ContextMenuContext.Provider value={ContextMenuActions}> */}
-					<Nav />
-					<Routes>
-						<Route path="/" element={<Home />} />
-
-						<Route path="/books" element={<Books />} />
-						<Route path="/bourbons" element={<Bourbons />} />
-						<Route path="/resumes" element={<Resumes />} />
-						<Route path="/posts" element={<Posts />} />
-						<Route path="/projects" element={<Projects />} />
-
-						<Route path="/books/bulk" element={<BooksBulk />} />
-						<Route path="/resumes/bulk" element={<ResumesBulk />} />
-						<Route path="/posts/bulk" element={<PostsBulk />} />
-						<Route path="/bourbon/:id?" element={<BourbonSingle />} />
-						<Route path="/book/:id?" element={<BookSingle />} />
-						<Route path="/resume/:id?" element={<ResumeSingle />} />
-						<Route path="/post/:id?" element={<PostSingle />} />
-						<Route path="/project/:id?" element={<ProjectSingle />} />
-					</Routes>
-					{modals}
-					{/* 
-						{contextMenu} */}
-					{/* </ContextMenuContext.Provider>
-					 */}
-				</ModalContext.Provider>
+				<AuthContextProvider>
+					<ModalContext.Provider value={actions}>
+						<Nav />
+						<Routes>
+							<Route path="/" element={<Home />} />
+							<Route
+								path="/books"
+								element={
+									<ProtectedRoute>
+										<Books />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path="/bourbons"
+								element={
+									<ProtectedRoute>
+										<Bourbons />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path="/resumes"
+								element={
+									<ProtectedRoute>
+										<Resumes />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path="/posts"
+								element={
+									<ProtectedRoute>
+										<Posts />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path="/projects"
+								element={
+									<ProtectedRoute>
+										<Projects />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path="/books/bulk"
+								element={
+									<ProtectedRoute>
+										<BooksBulk />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path="/resumes/bulk"
+								element={
+									<ProtectedRoute>
+										<ResumesBulk />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path="/posts/bulk"
+								element={
+									<ProtectedRoute>
+										<PostsBulk />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path="/bourbon/:id?"
+								element={
+									<ProtectedRoute>
+										<BourbonSingle />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path="/book/:id?"
+								element={
+									<ProtectedRoute>
+										<BookSingle />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path="/resume/:id?"
+								element={
+									<ProtectedRoute>
+										<ResumeSingle />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path="/post/:id?"
+								element={
+									<ProtectedRoute>
+										<PostSingle />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path="/project/:id?"
+								element={
+									<ProtectedRoute>
+										<ProjectSingle />
+									</ProtectedRoute>
+								}
+							/>
+						</Routes>
+						{modals}
+					</ModalContext.Provider>
+				</AuthContextProvider>
 			</Router>
 		</Page>
 	);
 }
 
 export default App;
+
+interface ProtectedRouteProps {
+	children: ReactElement;
+}
+
+const ProtectedRoute: React.FC<ProtectedRouteProps> = (props) => {
+	const auth = useContext(AuthContext);
+
+	if (!auth?.user) {
+		return <Navigate to="/" />;
+	}
+
+	return props.children;
+};

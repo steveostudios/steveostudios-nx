@@ -1,10 +1,17 @@
-import { Bourbon, getSingleDoc, updateSingleDoc } from "@nx/firebase";
+import {
+	Bourbon,
+	getSingleDoc,
+	updateSingleDoc,
+	uploadImageFromLocal,
+} from "@nx/firebase";
 import {
 	Button,
 	ButtonColor,
 	CheckboxInput,
 	Container,
 	H2,
+	ImageInput,
+	NumberInput,
 	Section,
 	TextInput,
 } from "@nx/ui";
@@ -12,7 +19,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 export const BourbonSingle: React.FC = () => {
-	const docType = "posts";
+	const docType = "bourbons";
 	const { id } = useParams<{ id: string }>();
 	const navigate = useNavigate();
 	const [doc, setDoc] = useState<Partial<Bourbon>>();
@@ -30,8 +37,12 @@ export const BourbonSingle: React.FC = () => {
 		setDocUpdate({ ...docUpdate, [prop]: value });
 	};
 
-	const onSave = () => {
+	const onSave = async () => {
 		if (doc && doc.id) {
+			if (docUpdate.image && typeof docUpdate.image !== "string") {
+				const imageUrl = await uploadImageFromLocal(docType, docUpdate.image);
+				docUpdate.image = imageUrl + ".jpg";
+			}
 			updateSingleDoc(docType, doc.id, { ...doc, ...docUpdate });
 		}
 		navigate(`/${docType}`);
@@ -45,7 +56,7 @@ export const BourbonSingle: React.FC = () => {
 	return (
 		<Container>
 			<Section>
-				<H2>{doc.name}</H2>
+				<H2>{docUpdate.name || doc.name || ""}</H2>
 
 				<TextInput
 					slug="name"
@@ -55,9 +66,39 @@ export const BourbonSingle: React.FC = () => {
 					visible
 					showLabel
 				/>
+				<ImageInput
+					bucket={docType}
+					alt={docUpdate.name || doc.name || ""}
+					slug="image"
+					label="Image"
+					value={docUpdate.image || doc.image || ""}
+					onChange={(value) => onUpdateProp("image", value)}
+					visible
+					width={30}
+					height={30}
+					showLabel
+				/>
+				<NumberInput
+					slug="volume"
+					label="Volume"
+					value={docUpdate.volume || doc.volume || 0}
+					onChange={(value) => onUpdateProp("volume", value)}
+					step={0.01}
+					visible
+					showLabel
+				/>
+				<NumberInput
+					slug="proof"
+					label="Proof"
+					value={docUpdate.proof || doc.proof || 0}
+					onChange={(value) => onUpdateProp("proof", value)}
+					step={0.01}
+					visible
+					showLabel
+				/>
 				<CheckboxInput
 					slug="opened"
-					label="Active"
+					label="Opened"
 					value={docUpdate.opened || doc.opened || false}
 					onChange={(value) => onUpdateProp("opened", value)}
 					visible
@@ -65,7 +106,7 @@ export const BourbonSingle: React.FC = () => {
 				/>
 				<CheckboxInput
 					slug="finished"
-					label="Active"
+					label="Finished"
 					value={docUpdate.finished || doc.finished || false}
 					onChange={(value) => onUpdateProp("finished", value)}
 					visible

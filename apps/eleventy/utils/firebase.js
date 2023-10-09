@@ -4,7 +4,6 @@ const { AssetCache } = require("@11ty/eleventy-fetch");
 const { initializeApp } = require("firebase/app");
 const { getDocs, collection, getFirestore } = require("firebase/firestore");
 const { ref, getDownloadURL, getStorage } = require("firebase/storage");
-// const Airtable = require("airtable");
 
 const firebaseConfig = {
 	apiKey: process.env.NX_FIREBASE_API_KEY,
@@ -43,8 +42,6 @@ module.exports = {
 		}
 	},
 	getFirebaseRecords: async function (col) {
-		console.log("got here", col);
-		// getAllDocs(col);
 		let asset = new AssetCache(`${col}`, ".cache");
 		if (asset.isCacheValid("1d")) {
 			console.log(`pulling ${col} from valid cache`);

@@ -89,7 +89,7 @@ export const Books: React.FC = (props) => {
 		getUpdatedDocs();
 	};
 
-	const bookFilter = (book: Book) => {
+	const docFilter = (book: Book) => {
 		if (sortKey === "notStarted") {
 			return !book.dateFinish && !book.dateStart;
 		}
@@ -148,7 +148,7 @@ export const Books: React.FC = (props) => {
 				</Filters>
 				<List
 					docType={docType}
-					items={docs.filter(bookFilter).sort((a, b) => {
+					items={docs.filter(docFilter).sort((a, b) => {
 						return (b.dateFinish || 0) > (a.dateFinish || 0) ? 1 : -1;
 					})}
 					rowOptions={[

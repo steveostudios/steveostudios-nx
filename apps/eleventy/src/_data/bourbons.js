@@ -1,16 +1,29 @@
 require("dotenv").config();
-
-const { getRecords } = require("./../../utils/airtable");
+const { getFirebaseRecords, getImage } = require("../../utils/firebase");
 
 module.exports = async () => {
-	return [];
-	const results = await getRecords(
-		process.env.AIRTABLE_BASE_BOURBON_BASE,
-		process.env.AIRTABLE_BASE_BOURBON_TABLE,
-		"bourbons"
-	);
+	const results = await getFirebaseRecords("bourbons");
 
-	return results
-		.filter((item) => item["Finished"] !== true)
-		.sort((a, b) => (a["Name"] > b["Name"] ? 1 : -1));
+	const fixed = await results
+		.filter((bourbon) => !bourbon.finished)
+		.sort((a, b) => {
+			if (a.name < b.name) {
+				return -1;
+			} else {
+				return 1;
+			}
+		})
+		.map(async (bourbon) => {
+			const image = await getImage("bourbons", bourbon.image)
+				.then((url) => {
+					return url;
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+
+			return { ...bourbon, image };
+		});
+
+	return await Promise.all(fixed);
 };

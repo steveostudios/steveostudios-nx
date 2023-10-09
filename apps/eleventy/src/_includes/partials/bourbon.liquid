@@ -1,25 +1,25 @@
-{% assign src = bourbon['Image'][0].thumbnails.large.url %}
+{% assign src = bourbon.image %}
 {% assign alt = bourbon.name %}   
   
 <div>
-  {% if bourbon['Single Barrel'] %}
+  {% if bourbon.singleBarrel %}
     <div class="single-barrel">
       {{ "/src/img/icons/barrel.svg" | svgContents: "icon" }}
     </div>
   {% endif %}
-  {% if bourbon['Rye'] %}
+  {% if bourbon.rye %}
     <div class="rye">
       {{ "/src/img/icons/rye.svg" | svgContents: "icon" }}
     </div>
   {% endif %}
-  {% if src %}
+  {% if src != "" %}
     {% image src, alt, "bourbons" %}
   {% else %}
     {{ "/src/img/icons/bottle.svg" | svgContents: "icon" }}
   {% endif %}
   <h3>{{ bourbon.name }}</h3>
-  {% if bourbon['BnB'] %}
+  {% if bourbon.bottleAndBond %}
     {{ "/src/img/icons/bottledinbond.svg" | svgContents: "icon" }}
   {% endif %}
-  <span>{{ bourbon["Volume"]}}ml | {{ bourbon["Proof"]}} Proof</span>
+  <span>{{ bourbon.volume}}ml | {{ bourbon.proof}} Proof</span>
 </div>
