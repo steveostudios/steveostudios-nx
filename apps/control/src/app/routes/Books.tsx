@@ -16,7 +16,7 @@ export const Books: React.FC = (props) => {
 	const docType = "books";
 	const docTypeSingular = "book";
 	const { pushModal } = useModals();
-	const [sortKey, setSortKey] = useState<string>("all");
+	const [sortKey, setSortKey] = useState<string>("reading");
 	const [docs, setDocs] = useState<Book[]>([]);
 	const [selected, setSelected] = useState<string[]>([]);
 

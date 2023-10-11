@@ -7,8 +7,7 @@
 		"build": {
 			"executor": "nx:run-commands",
 			"options": {
-				"commands": ["npx @11ty/eleventy --input=src"],
-				"cwd": "./apps/eleventy"
+				"commands": ["npx @11ty/eleventy --input=src"]
 			}
 		},
 		"serve": {
