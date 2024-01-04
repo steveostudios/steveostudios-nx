@@ -32,7 +32,7 @@ import BookSingle from "./routes/Book";
 import { ResumesBulk } from "./routes/ResumesBulk";
 import { PostsBulk } from "./routes/PostsBulk";
 import { AuthContext, AuthContextProvider } from "./providers/AuthProvider";
-library.add(fal, far, fas, fab);
+library.add(fal, far, fas);
 
 const uid = (() => {
 	let i = 0;
