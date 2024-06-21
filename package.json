@@ -84,6 +84,7 @@
 		"react-dom": "18.2.0",
 		"react-router-dom": "^6.8.1",
 		"react-svg-text": "^0.1.2",
+		"sharp": "^0.33.4",
 		"tslib": "^2.3.0",
 		"use-fit-text": "^2.4.0",
 		"uuid": "^9.0.0"
