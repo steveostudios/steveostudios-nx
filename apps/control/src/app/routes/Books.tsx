@@ -1,4 +1,13 @@
-import { Container, Section, Button, List, Heading, ButtonColor } from "@nx/ui";
+import {
+	Container,
+	Section,
+	Button,
+	List,
+	Heading,
+	ButtonColor,
+	ProgressInput,
+	Colors,
+} from "@nx/ui";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
@@ -10,6 +19,7 @@ import {
 } from "@nx/firebase";
 import { useModals } from "../providers/ModalProvider";
 import RemoveDocsModal from "../modals/RemoveDocs";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const Books: React.FC = (props) => {
 	const navigate = useNavigate();
@@ -161,19 +171,57 @@ export const Books: React.FC = (props) => {
 							color: ButtonColor.DANGER,
 						},
 					]}
+					rowHeight={7}
 					columns={[
 						{
 							name: "cover",
 							label: "Cover",
 							order: 1,
 							image: true,
-							imageWidth: 1,
+							imageWidth: 5,
 						},
 						{
 							name: "title",
 							label: "Title",
 							order: 2,
 							flex: 1,
+						},
+						{
+							name: "progress",
+							label: "Progress",
+							order: 3,
+							component: (doc: Book) => {
+								if (!doc.dateStart) {
+									return <div>Not Started</div>;
+								}
+
+								if (doc.dateFinish) {
+									return (
+										<div>
+											<FontAwesomeIcon
+												icon={"check-circle"}
+												color={Colors.success}
+											/>
+										</div>
+									);
+								}
+
+								return (
+									<ProgressInput
+										slug="progress"
+										label="Progress"
+										value={
+											doc.format === "AUDIO"
+												? ((doc.minutesFinish || 0) / (doc?.minutes || 0)) * 100
+												: doc.format !== "AUDIO"
+												? ((doc.pagesFinish || 0) / (doc?.pages || 0)) * 100
+												: 0
+										}
+										visible
+										showLabel
+									/>
+								);
+							},
 						},
 					]}
 					selected={selected}

@@ -3,9 +3,7 @@ import { CheckboxInput } from "./CheckboxInput";
 import { Button, ButtonColor } from "./Button";
 import { Colors } from "./Colors";
 import { Table } from "./Layout";
-import React, { useState } from "react";
-// import { useModals } from "../../context/ModalProvider";
-// import RemoveAllModal from "../modals/RemoveAll";
+import React from "react";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { Image } from "./Image";
 
@@ -19,6 +17,7 @@ interface ListProps {
 	onRemoveSelected?: () => void;
 	selected: string[];
 	setSelected: (selected: string[]) => void;
+	rowHeight?: number;
 }
 
 interface RowOptionProps {
@@ -36,6 +35,7 @@ interface Column {
 	flex?: number;
 	imageWidth?: number;
 	image?: boolean;
+	component?: (item: any) => React.ReactNode;
 }
 
 export const List: React.FC<ListProps> = (props) => {
@@ -89,16 +89,24 @@ export const List: React.FC<ListProps> = (props) => {
 						onSelected={onSelect}
 						rowOptions={props.rowOptions}
 						id={item.id}
+						rowHeight={props.rowHeight}
 					>
 						{props.columns.map((column) => {
-							if (column.image) {
+							if (column.component) {
+								return (
+									<div key={column.name} style={{ flex: column.flex }}>
+										{column.component(item)}
+									</div>
+								);
+							} else if (column.image) {
 								return (
 									<div key={column.name} style={{ flex: column.flex }}>
 										<Image
 											bucket={props.docType}
 											value={item[column.name]}
 											alt="cover"
-											width={8}
+											width={column.imageWidth}
+											height={props.rowHeight || 4}
 										/>
 									</div>
 								);
@@ -186,11 +194,12 @@ interface RowProps {
 	onRemove?: (id: string) => void;
 	onDuplicate?: (id: string) => void;
 	rowOptions?: RowOptionProps[];
+	rowHeight?: number;
 }
 
 const Row: React.FC<RowProps> = (props) => {
 	return (
-		<RowStyled>
+		<RowStyled rowHeight={props.rowHeight}>
 			<CheckboxInput
 				label="select"
 				visible
@@ -214,15 +223,16 @@ const Row: React.FC<RowProps> = (props) => {
 	);
 };
 
-const RowStyled = styled("div")({
+const RowStyled = styled("div")((props: { rowHeight?: number }) => ({
 	display: "flex",
 	alignItems: "center",
 	justifyContent: "space-between",
 	padding: "0.5rem",
 	borderBottom: `1px solid ${Colors.trim}`,
 	minHeight: "4rem",
+	height: props.rowHeight ? `${props.rowHeight}rem` : "4rem",
 	gap: "1rem",
-});
+}));
 
 const RowOptions = styled("div")({
 	display: "flex",
