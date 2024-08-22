@@ -88,4 +88,5 @@
 .book-cover progress {
 	margin-top: 1rem;
 	align-self: center;
+	transform: translateZ(20px);
 }
