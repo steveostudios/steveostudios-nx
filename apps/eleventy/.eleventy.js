@@ -7,6 +7,7 @@ const { getStats } = require("./utils/collections/getBookStats");
 const { lineGraph } = require("./utils/shortcodes/graph");
 const { markdown } = require("./utils/shortcodes/markdown");
 const { currentlyReading, notStarted } = require("./utils/filters/books");
+const { goalProgress } = require("./utils/shortcodes/goalProgress");
 
 module.exports = function (eleventyConfig) {
 	console.log("DOING IT");
@@ -38,6 +39,9 @@ module.exports = function (eleventyConfig) {
 	);
 	eleventyConfig.addLiquidShortcode("pagesByYearSVG", (books) =>
 		lineGraph(books, "pages", { gap: 1000 })
+	);
+	eleventyConfig.addLiquidShortcode("goalProgress", (goals, books) =>
+		goalProgress(goals, books)
 	);
 
 	return {
