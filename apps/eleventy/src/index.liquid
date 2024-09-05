@@ -71,5 +71,19 @@ layout: layouts/base.liquid
       {% endfor %}
     </ol>
   </div>
+
+    <div class="realYou personality">
+    <h3>Real You</h3>
+    {{ "/src/img/icons/fingerprint.svg" | svgContents: "icon" }}
+    <ul>
+      {% for cat in me.personality.realYou %}
+      <li><span>{{ cat[0] }}</span>:
+          {% for item in cat[1] %}
+          {{ item }},
+          {% endfor %}
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
   
 </div>
