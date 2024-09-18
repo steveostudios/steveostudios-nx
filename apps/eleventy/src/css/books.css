@@ -55,14 +55,8 @@
 	margin: 0 0 calc(1em + 2vw);
 	line-height: 1.2;
 	list-style: none;
+	gap: 3rem 1rem;
 }
-
-/* @media only screen and (max-width: 767px) {
-
-.page.books .shelf {
-  
-}
-} */
 
 .page.books progress {
 	width: 80%;
@@ -161,7 +155,8 @@
 .page.book .content .stars {
 	display: flex;
 	height: 1rem;
-	position: relative;
+	position: absolute;
+	bottom: -1rem;
 	min-width: 6rem;
 }
 
