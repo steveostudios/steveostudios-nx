@@ -1,0 +1,18 @@
+{
+	"projects": {
+		"default": "steveostudios"
+	},
+	"targets": {
+		"steveostudios-2aa29": {
+			"hosting": {
+				"steveostudios-admin": [
+					"steveostudios-admin"
+				],
+				"steveostudios-2aa29": [
+					"steveostudios-2aa29"
+				]
+			}
+		}
+	},
+	"etags": {}
+}

@@ -32,7 +32,7 @@
 }
 
 .bookStats svg .year .value {
-	font-size: 10px;
+	/* font-size: 10px; */
 	paint-order: stroke;
 	fill: var(--dark-grey);
 	stroke: var(--white);
@@ -42,7 +42,7 @@
 }
 
 .bookStats svg .year .xyear {
-	font-size: 10px;
+	/* font-size: 10px; */
 	text-orientation: mixed;
 	writing-mode: vertical-rl;
 	fill: var(--grey);

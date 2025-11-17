@@ -31,7 +31,12 @@
 			"title": "Senior Software Engineer",
 			"dates": "05/2022 - Present",
 			"location": "Remote, Louisville, KY",
-			"description": []
+			"description": [
+				"Full-stack developer, including APIs, NodeJS, React, GraphQL, Jest, WebDriverIO, Postgres.",
+				"Help create robust features in Figma before development.",
+				"Created and maintain a Storybook design system to maintain a consistent UI throughout applications in our monorepo.",
+				"Features planning from idea to design to code to deploy."
+			]
 		},
 		{
 			"company": "Download Youth Ministry",
@@ -184,18 +189,25 @@
 		},
 		{
 			"title": "Live Production",
-			"apps": ["ProPresenter", "ProVideoPlayer", "Zoom", "OBS", "Sidekick"]
+			"apps": [
+				"Playlister",
+				"ProPresenter",
+				"ProVideoPlayer",
+				"Zoom",
+				"OBS",
+				"Sidekick"
+			]
 		},
 		{
 			"title": "Software Development",
 			"apps": [
-				"VSCode",
+				"Cursor",
 				"Javascript",
 				"React",
 				"Git",
 				"Node",
 				"Electron",
-				"Redux",
+				"GraphQL",
 				"SQL"
 			]
 		}

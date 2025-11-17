@@ -7,14 +7,13 @@ const getStats = (collectionApi) => {
 	const yearStats = Object.entries(
 		books
 			.filter((book) => book.dateFinish) // filter only finished books
-
 			.sort((a, b) => new Date(b.dateFinish) - new Date(a.dateFinish)) // sort by finish date
 			.reduce((acc, cur) => {
-				// add them to arrays by year
-				acc[new Date(cur["dateFinish"]).getFullYear()] = [
-					...(acc[new Date(cur["dateFinish"]).getFullYear()] || []),
-					cur,
-				];
+				const year = new Date(cur["dateFinish"]).getFullYear();
+				if (!acc[year]) {
+					acc[year] = [];
+				}
+				acc[year].push(cur);
 				return acc;
 			}, {})
 	) // put into array
@@ -45,6 +44,7 @@ const getStats = (collectionApi) => {
 	const thisYearBooksRank = yearStats.filter(
 		(year) => year.books >= yearStats.find((item) => item.year === now).books
 	).length;
+
 	const thisYearPagesRank = yearStats.filter(
 		(year) => year.pages >= yearStats.find((item) => item.year === now).pages
 	).length;

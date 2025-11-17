@@ -34,8 +34,12 @@ module.exports = function (eleventyConfig) {
 	// Shortcodes
 	eleventyConfig.addLiquidShortcode("image", image);
 	eleventyConfig.addLiquidShortcode("markdown", markdown);
-	eleventyConfig.addLiquidShortcode("booksByYearSVG", (books) =>
-		lineGraph(books, "books")
+	eleventyConfig.addLiquidShortcode(
+		"booksByYearSVG",
+		(books, optionsJSON = "{}") => {
+			const options = JSON.parse(optionsJSON);
+			return lineGraph(books, "books", options);
+		}
 	);
 	eleventyConfig.addLiquidShortcode("pagesByYearSVG", (books) =>
 		lineGraph(books, "pages", { gap: 1000 })
