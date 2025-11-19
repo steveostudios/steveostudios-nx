@@ -41,8 +41,12 @@ module.exports = function (eleventyConfig) {
 			return lineGraph(books, "books", options);
 		}
 	);
-	eleventyConfig.addLiquidShortcode("pagesByYearSVG", (books) =>
-		lineGraph(books, "pages", { gap: 1000 })
+	eleventyConfig.addLiquidShortcode(
+		"pagesByYearSVG",
+		(books, optionsJSON = "{}") => {
+			const options = { ...{ gap: 1000 }, ...JSON.parse(optionsJSON) };
+			return lineGraph(books, "pages", options);
+		}
 	);
 	eleventyConfig.addLiquidShortcode("goalProgress", (goals, books) =>
 		goalProgress(goals, books)
